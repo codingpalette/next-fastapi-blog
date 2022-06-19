@@ -45,7 +45,7 @@ const popOutToBottom = keyframes`
 const sideInFromRight = keyframes`
   0% {
     opacity: 0;
-    transform: translateX(200px) ;
+    transform: translateX(250px) ;
   }
   //75% {
   //  opacity: 1;
@@ -63,7 +63,7 @@ const sideOutToRight = keyframes`
   }
   100% {
     opacity: 0;
-    transform: translateX(200px) ;
+    transform: translateX(250px) ;
   }
 `;
 

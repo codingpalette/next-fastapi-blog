@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from "../../components/base/Header";
+import SideBar from "../../components/base/SideBar";
 
 export type MainContainerProps = {
   /** 버튼 안의 내용 */
@@ -15,6 +16,7 @@ const MainContainer = ({children}: MainContainerProps) => {
         <div>
           {children}
         </div>
+
       </div>
     </>
   )

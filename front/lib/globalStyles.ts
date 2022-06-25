@@ -11,6 +11,7 @@ export const globalStyles = css`
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     width: 100%;
     height: 100%;
+    color: #46423A;
   }
   #__next{
     width: 100%;

@@ -1,9 +1,22 @@
 import styled from '@emotion/styled'
+import {css} from "@emotion/react";
+import {palette} from "../../../lib/globalStyles";
 
-export const ButtonBox = styled.button`
-  background-color: #BAB29E;
+export const ButtonBox = styled.button<{shape: string}>`
+  background-color: ${palette.back};
+  height: 36px;
+  color: ${palette.text};
+  ${(props) => props.shape === 'default' ?
+          css`
+            min-width: 100px;
+          `
+          : css`
+            min-width: 0px;
+            width: 36px;
+          `
+  }
   &.active{
-    background-color: #45423A;
-    color: #C9C2AA;
+    background-color: ${palette.backActive};
+    color: ${palette.textActive};
   }
 `

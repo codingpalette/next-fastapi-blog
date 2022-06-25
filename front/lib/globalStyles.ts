@@ -1,6 +1,14 @@
 import { css } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 
+
+export const palette = {
+  text: '#46423A',
+  back: '#BAB29E',
+  textActive: '#C9C2AA',
+  backActive: '#45423A'
+}
+
 export const globalStyles = css`
   ${emotionReset}
 
@@ -11,7 +19,7 @@ export const globalStyles = css`
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     width: 100%;
     height: 100%;
-    color: #46423A;
+    color: ${palette.text};
   }
   #__next{
     width: 100%;
@@ -27,3 +35,4 @@ export const globalStyles = css`
   }
   
 `
+

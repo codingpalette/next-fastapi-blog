@@ -1,11 +1,23 @@
 import React from 'react'
+import {NabBtnBox} from "./styles";
 
-const NavBtn = () => {
+export type NavBtnProps = {
+  children?: React.ReactNode;
+  className?: string;
+  // icon?: React.ReactNode;
+  // onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
+  // shape: 'default' | 'icon'
+};
+
+const NavBtn = ({children, className}: NavBtnProps) => {
   return(
     <>
-      <div>
-        sdfsd
-      </div>
+      <NabBtnBox className={`${className} w-full p-2 flex items-center relative`}>
+        <span className="square"></span>
+        <div className="ml-2">
+          {children}
+        </div>
+      </NabBtnBox>
     </>
   )
 }

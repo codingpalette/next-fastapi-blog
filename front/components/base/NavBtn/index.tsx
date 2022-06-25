@@ -1,7 +1,7 @@
 import React from 'react'
 import {NabBtnBox} from "./styles";
 
-export type NavBtnProps = {
+interface NavBtnProps {
   children?: React.ReactNode;
   className?: string;
   // icon?: React.ReactNode;

@@ -3,7 +3,7 @@ import {HeaderBox} from "./styles";
 import SideBar from "../SideBar";
 import Button from "../Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
 
@@ -20,7 +20,7 @@ const Header = () => {
 
   return(
     <>
-      <HeaderBox className="w-full p-4 flex">
+      <HeaderBox className="w-full p-4 flex gap-x-4">
         <Button
           icon={<FontAwesomeIcon icon={faBars} />}
           onClick={sideBarOpen}
@@ -28,6 +28,11 @@ const Header = () => {
           className="ml-auto"
         >
           MENU
+        </Button>
+        <Button
+          icon={<FontAwesomeIcon icon={faUser} />}
+        >
+          USER
         </Button>
       </HeaderBox>
       <SideBar active={sideBarActive} closeEvent={sideBarClose} />

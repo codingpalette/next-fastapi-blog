@@ -12,7 +12,7 @@ const menuList = [
   // {id: 2, name: 'Test', path: '/test'},
 ]
 
-export type SideBarProps = {
+interface SideBarProps {
   active: boolean;
   closeEvent?: (e?: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
   // children: React.ReactNode;

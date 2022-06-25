@@ -1,7 +1,7 @@
 import React from 'react'
 import {ButtonBox} from "./styles";
 
-export type ButtonProps = {
+interface ButtonProps {
   children?: React.ReactNode;
   className?: string;
   icon?: React.ReactNode;

@@ -5,6 +5,7 @@ export const NabBtnBox = styled.div`
   color: ${palette.text};
   background-color: ${palette.back};
   box-sizing: border-box;
+  transition: 0.2s ease-in-out;
   &:hover{
     box-shadow: 5px 5px 10px rgba(0,0,0,0.19), 3px 3px 3px rgba(0,0,0,0.23);
     transform: translate(-1px, -1px);
@@ -24,7 +25,4 @@ export const NabBtnBox = styled.div`
       background-color: ${palette.back};
     }
   }
-
-  transition: 0.2s ease-in-out;;
- 
 `

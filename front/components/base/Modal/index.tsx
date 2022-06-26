@@ -9,7 +9,8 @@ interface ModalProps {
   children?: React.ReactNode;
   active: boolean;
   closeEvent?: (e?: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
-  width: string
+  width: string;
+  footer: any;
   // className?: string;
   // icon?: React.ReactNode;
   // onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
@@ -17,7 +18,7 @@ interface ModalProps {
 };
 
 
-const Modal = ({active, closeEvent, title, children, width}: ModalProps) => {
+const Modal = ({active, closeEvent, title, children, width, footer}: ModalProps) => {
   const [closed, setClosed] = useState(true);
 
   useEffect(() => {
@@ -56,8 +57,22 @@ const Modal = ({active, closeEvent, title, children, width}: ModalProps) => {
             <span className="ml-3">{title}</span>
             <Button onClick={closeEvent} className="ml-auto" shape="icon" icon={<FontAwesomeIcon icon={faXmark} size="lg" />}  />
           </div>
-          <div>
-            sdfsdf
+          <div className="p-4">
+            {children}
+          </div>
+          <div className="line"></div>
+          <div className="footer p-4 flex justify-end gap-4">
+            {footer.length === 0 ? (
+              <>
+                <Button onClick={closeEvent} >
+                  닫기
+                </Button>
+              </>
+            ) : (
+              footer.map((v: any) => (
+                v
+              ))
+            )}
           </div>
         </ModalContent>
       </div>
@@ -66,7 +81,8 @@ const Modal = ({active, closeEvent, title, children, width}: ModalProps) => {
 }
 
 Modal.defaultProps = {
-  width: '520px'
+  width: '520px',
+  footer: []
 };
 
 

@@ -53,8 +53,16 @@ const Header = () => {
         active={authModalActive}
         closeEvent={authModalClose}
         title="유저"
+        footer={[
+          <Button key="back" onClick={authModalClose}>
+            닫기
+          </Button>,
+          <Button key="submit" >
+            확인
+          </Button>,
+        ]}
       >
-        <div>sdfsd</div>
+        <div>모달</div>
       </Modal>
     </>
   )

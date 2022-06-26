@@ -5,6 +5,7 @@ import emotionReset from 'emotion-reset';
 export const palette = {
   text: '#46423A',
   back: '#BAB29E',
+  back2: '#D8D2B9',
   textActive: '#C9C2AA',
   backActive: '#45423A'
 }

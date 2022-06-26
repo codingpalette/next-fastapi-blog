@@ -5,6 +5,7 @@ import Button from "../Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
 import Modal from "../Modal";
+import Input from "../Input";
 
 const Header = () => {
 
@@ -62,7 +63,9 @@ const Header = () => {
           </Button>,
         ]}
       >
-        <div>모달</div>
+        <div>
+          <Input  />
+        </div>
       </Modal>
     </>
   )

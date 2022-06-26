@@ -29,7 +29,7 @@ def create_app():
         print(db)
         return {"Hello": "World"}
 
-    app.include_router(user.router, tags=["user"], prefix="/api")
+    app.include_router(user.router, tags=["유저"], prefix="/api")
 
     return app
 

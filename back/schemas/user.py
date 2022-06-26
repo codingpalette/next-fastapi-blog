@@ -4,8 +4,7 @@ from pydantic import BaseModel
 
 class UserBase(BaseModel):
     # pass
-    login_id: str
-
+    email: str
     class Config:
         orm_mode = True
 
@@ -18,7 +17,7 @@ class UserNickname(UserBase):
     nickname: str
 
 
-class UserCreate(UserBase):
+class UserSet(UserBase):
     nickname: str
     level: Optional[int] = None
     password: str

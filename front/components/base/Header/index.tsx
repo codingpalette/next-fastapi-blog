@@ -4,10 +4,16 @@ import SideBar from "../SideBar";
 import Button from "../Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
+import {SubmitHandler, useForm} from "react-hook-form";
 import Modal from "../Modal";
 import Input from "../Input";
 
+type Inputs = {
+  email: string
+};
+
 const Header = () => {
+  const { register, handleSubmit } = useForm<Inputs>();
 
   // 사이드바 상태 값
   const [sideBarActive, setSideBarActive] = useState(false)
@@ -30,6 +36,10 @@ const Header = () => {
   const authModalClose = () => {
     setAuthModalActive(false)
   }
+
+  const onSubmit : SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
 
   return(
     <>
@@ -58,13 +68,15 @@ const Header = () => {
           <Button key="back" onClick={authModalClose}>
             닫기
           </Button>,
-          <Button key="submit" >
+          <Button key="submit" onClick={handleSubmit(onSubmit)} >
             확인
           </Button>,
         ]}
       >
         <div>
-          <Input  />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input placeholder="이메일" register={{...register("email")}}  />
+          </form>
         </div>
       </Modal>
     </>

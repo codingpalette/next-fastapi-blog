@@ -7,6 +7,10 @@ export const InputBox = styled.input`
   background-color: ${palette.back};
   font-size: 14px;
   transition: all .3s;
+  &::placeholder{
+    color: ${palette.text};
+    opacity: 0.5;
+  }
   &:focus{
     border: 1px solid ${palette.backActive};
   }

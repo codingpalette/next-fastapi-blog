@@ -4,13 +4,15 @@ import {InputBox} from "./styles";
 interface InputProps {
   type: string
   placeholder?: string
-  className?: string;
+  className?: string
   maxLength?: number
-  style?: React.CSSProperties;
+  style?: React.CSSProperties
+  defaultValue?: string
+  register?: any
 };
 
 
-const Input = ({type, placeholder, className, maxLength, style} : InputProps) => {
+const Input = ({type, placeholder, className, maxLength, style, defaultValue, register} : InputProps) => {
   return(
     <>
       <InputBox
@@ -19,6 +21,8 @@ const Input = ({type, placeholder, className, maxLength, style} : InputProps) =>
         className={`${className} px-3 py-1`}
         maxLength={maxLength}
         style={style}
+        defaultValue={defaultValue}
+        {...register}
       />
     </>
   )

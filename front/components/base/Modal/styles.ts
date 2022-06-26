@@ -31,9 +31,9 @@ export const ModalContent = styled.div<{active: boolean, Width: string}>`
   }
   
   .line{
-    width: 90%;
+    width: calc(100% - 2rem);
     height: 1.5px;
     background-color: ${palette.back};
-    transform: translateX(5%);
+    transform: translateX(1rem);
   }
 `

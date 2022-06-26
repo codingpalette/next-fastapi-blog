@@ -24,10 +24,6 @@ const SideBar = ({active, closeEvent}: SideBarProps) => {
   const [closed, setClosed] = useState(true);
 
   useEffect(() => {
-    console.log('router', router)
-  }, [router])
-
-  useEffect(() => {
     document.body.style.overflowY = active ? 'hidden' : 'initial';
 
     let timeoutId: any;
@@ -58,7 +54,7 @@ const SideBar = ({active, closeEvent}: SideBarProps) => {
       <div className="fixed left-0 top-0 w-full h-full z-50">
         <div onClick={closeEvent} className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-40 z-10" />
         <SideBarNavBox active={active} className="absolute right-0 top-0 h-full z-20">
-          <div className="title px-2 py-4 flex items-center justify-between">
+          <div className="title px-4 py-3 flex items-center justify-between">
             <span>메뉴</span>
             <Button onClick={closeEvent} shape="icon" icon={<FontAwesomeIcon icon={faXmark} size="lg" />}  />
           </div>

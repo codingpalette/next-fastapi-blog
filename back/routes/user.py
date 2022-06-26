@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 from database.connection import get_db
 from schemas import user
 from crud import crud_user
+from functions import token
 import bcrypt
+import datetime
 
 router = APIRouter(
     prefix="/user",
@@ -28,6 +30,42 @@ def user_set(post_data: user.UserSet, db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=501, detail={"result": "fail", "message": "회원가입에 실패 했습니다."})
 
+
+# 유저 로그인
+@router.post('/login')
+def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
+    email_info = crud_user.user_get_email(db, post_data.email)
+    if not email_info:
+        raise HTTPException(status_code=401,  detail={"result": "fail", "message": "존재하지 않는 이메일 입니다."})
+    password_check = bcrypt.checkpw(post_data.password.encode('utf-8'), email_info.password.encode('utf-8'))
+    if not password_check:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "비밀번호가 틀립니다."})
+
+    access_token = token.create_token('access_token', email_info)
+    refresh_token = token.create_token('refresh_token', email_info)
+    token_update = crud_user.token_update(db, email_info.email, refresh_token)
+    if token_update:
+        access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        refresh_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=14)
+        content = {"result": "success", "message": "로그인 성공"}
+        response = JSONResponse(content=content)
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            secure=True,
+            httponly=True,
+            expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            secure=True,
+            httponly=True,
+            expires=refresh_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
+        return response
+    else:
+        raise HTTPException(status_code=501, detail={"result": "fail", "message": "로그인에 실패했습니다."})
 
 # 테스트
 @router.get('/test')

@@ -16,7 +16,7 @@ def user_set(db: Session, post_data: user.UserSet) -> User:
         db.refresh(db_obj)
         return db_obj
     except Exception as e:
-        print(e)
+        # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
 # 이메일 체크 함수
@@ -35,7 +35,15 @@ def user_get_nickname(db: Session, nickname: user.UserNickname) -> User:
         # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
-
-def get_user_by_nickname(db: Session, req: user.UserNickname) -> User:
-    return db.query(User).filter(User.nickname == req.nickname).first()
+# 리프레시 토큰 업데이트
+def token_update(db: Session, post_data: user.UserBase, refresh_token: str) -> User:
+    try:
+        user_info = user_get_email(db, post_data)
+        user_info.refresh_token = refresh_token
+        db.commit()
+        db.refresh(user_info)
+        return user_info
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 

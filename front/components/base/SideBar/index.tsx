@@ -9,7 +9,7 @@ import NavBtn from "../NavBtn";
 
 const menuList = [
   {id: 1, name: 'Home', path: '/'},
-  // {id: 2, name: 'Test', path: '/test'},
+  {id: 2, name: 'Post', path: '/post'},
 ]
 
 interface SideBarProps {

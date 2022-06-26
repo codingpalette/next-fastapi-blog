@@ -1,14 +1,14 @@
-import type { NextPage } from 'next'
+import React from 'react'
 import MainContainer from "../containers/MainContainer";
 
-const Home: NextPage = () => {
-  return (
+const Post = () => {
+  return(
     <>
       <MainContainer>
-        home
+        post
       </MainContainer>
     </>
   )
 }
 
-export default Home
+export default Post

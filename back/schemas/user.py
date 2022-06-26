@@ -5,8 +5,8 @@ from pydantic import BaseModel
 class UserBase(BaseModel):
     # pass
     email: str
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
 
 class UserLoginId(UserBase):

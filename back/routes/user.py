@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
+from starlette.requests import Request
 from sqlalchemy.orm import Session
 from database.connection import get_db
 from schemas import user
 from crud import crud_user
-from functions import token
+from functions import token, func
 import bcrypt
 import datetime
 
@@ -14,13 +15,29 @@ router = APIRouter(
 
 # 유저 회원가입
 @router.post('')
-def user_set(post_data: user.UserSet, db: Session = Depends(get_db)):
+async def user_set(request: Request, post_data: user.UserSet, db: Session = Depends(get_db)):
+    """
+    :param request: \n
+    :param post_data: \n
+    :param db: \n
+    :return:
+    """
+    # 로그인 여부 확인
+    login_info = await func.login_info_get(request)
+    if login_info:
+        raise HTTPException(status_code=401,  detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
+
+    # 이메일 체크
     email_info = crud_user.user_get_email(db, post_data.email)
     if email_info:
         raise HTTPException(status_code=401,  detail={"result": "fail", "message": "이미 사용중인 이메일 입니다."})
+
+    # 닉네임 체크
     nickname_info = crud_user.user_get_nickname(db, post_data.nickname)
     if nickname_info:
         raise HTTPException(status_code=401,  detail={"result": "fail", "message": "이미 사용중인 닉네임 입니다."})
+
+    # 비밀번호 암호화
     hashed_password = bcrypt.hashpw(post_data.password.encode('utf-8'), bcrypt.gensalt())
     save_password = hashed_password.decode('utf-8')
     post_data.password = save_password
@@ -33,16 +50,29 @@ def user_set(post_data: user.UserSet, db: Session = Depends(get_db)):
 
 # 유저 로그인
 @router.post('/login')
-def user_login(post_data: user.UserLogin, db: Session = Depends(get_db)):
+async def user_login(request: Request, post_data: user.UserLogin, db: Session = Depends(get_db)):
+    """
+    post_data: email, password \n
+    """
+    # 로그인 여부 확인
+    login_info = await func.login_info_get(request)
+    if login_info:
+        raise HTTPException(status_code=401,  detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
+
+    # 이메일 체크
     email_info = crud_user.user_get_email(db, post_data.email)
     if not email_info:
         raise HTTPException(status_code=401,  detail={"result": "fail", "message": "존재하지 않는 이메일 입니다."})
+
+    # 패스워드 체크
     password_check = bcrypt.checkpw(post_data.password.encode('utf-8'), email_info.password.encode('utf-8'))
     if not password_check:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "비밀번호가 틀립니다."})
 
+    # 토큰 만들기
     access_token = token.create_token('access_token', email_info)
     refresh_token = token.create_token('refresh_token', email_info)
+    # db에 토큰 업데이트
     token_update = crud_user.token_update(db, email_info.email, refresh_token)
     if token_update:
         access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)

@@ -4,6 +4,7 @@ import SideBar from "../SideBar";
 import Button from "../Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
+import Modal from "../Modal";
 
 const Header = () => {
 
@@ -16,6 +17,17 @@ const Header = () => {
   // 사이드바 닫기 이벤트
   const sideBarClose = () => {
     setSideBarActive(false)
+  }
+
+  // 인증 모달 상태 값
+  const [authModalActive, setAuthModalActive] = useState(false)
+  // 인증 모달 열기 이벤트
+  const authModalOpen = () => {
+    setAuthModalActive(true)
+  }
+  // 인증 모달 닫기 이벤트
+  const authModalClose = () => {
+    setAuthModalActive(false)
   }
 
   return(
@@ -31,11 +43,19 @@ const Header = () => {
         </Button>
         <Button
           icon={<FontAwesomeIcon icon={faUser} />}
+          onClick={authModalOpen}
         >
           USER
         </Button>
       </HeaderBox>
       <SideBar active={sideBarActive} closeEvent={sideBarClose} />
+      <Modal
+        active={authModalActive}
+        closeEvent={authModalClose}
+        title="유저"
+      >
+        <div>sdfsd</div>
+      </Modal>
     </>
   )
 }

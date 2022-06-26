@@ -51,7 +51,7 @@ const Modal = ({active, closeEvent, title, children, width, footer}: ModalProps)
     <>
       <div className="fixed left-0 top-0 w-full h-full z-50">
         <div onClick={closeEvent} className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-40 z-10" />
-        <ModalContent className="absolute left-2/4 top-2/4 z-20" Width={width}>
+        <ModalContent active={active} className="absolute left-2/4 top-2/4 z-20" Width={width}>
           <div className="title_box px-4 py-3 flex items-center">
             <span className="square"></span>
             <span className="ml-3">{title}</span>

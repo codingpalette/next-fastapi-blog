@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from models.user import User
 from schemas import user
 
+
 # 유저 생성 함수
 def user_set(db: Session, post_data: user.UserSet) -> User:
     try:
@@ -19,6 +20,7 @@ def user_set(db: Session, post_data: user.UserSet) -> User:
         # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
+
 # 이메일 체크 함수
 def user_get_email(db: Session, email: user.UserBase) -> User:
     try:
@@ -27,6 +29,7 @@ def user_get_email(db: Session, email: user.UserBase) -> User:
         # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
+
 # 닉네임 체크 함수
 def user_get_nickname(db: Session, nickname: user.UserNickname) -> User:
     try:
@@ -34,6 +37,16 @@ def user_get_nickname(db: Session, nickname: user.UserNickname) -> User:
     except Exception as e:
         # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
+
+
+# 아이디 체크 함수
+def user_get_id(db: Session, id: int) -> User:
+    try:
+        return db.query(User).filter(User.id == id).first()
+    except Exception as e:
+        # print(e)
+        raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
+
 
 # 리프레시 토큰 업데이트
 def token_update(db: Session, post_data: user.UserBase, refresh_token: str) -> User:
@@ -47,3 +60,15 @@ def token_update(db: Session, post_data: user.UserBase, refresh_token: str) -> U
         print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
+
+# 로그아웃
+def log_out(db: Session, id: int) -> User:
+    try:
+        user_info = user_get_id(db, id)
+        user_info.refresh_token = ''
+        db.commit()
+        db.refresh(user_info)
+        return user_info
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})

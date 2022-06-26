@@ -4,7 +4,6 @@ import {palette} from "../../../lib/globalStyles";
 
 export const ButtonBox = styled.button<{shape: string}>`
   background-color: ${palette.back};
-  height: 36px;
   color: ${palette.text};
   transition: 0.2s ease-in-out;
   &:hover{
@@ -14,10 +13,12 @@ export const ButtonBox = styled.button<{shape: string}>`
   ${(props) => props.shape === 'default' ?
           css`
             min-width: 100px;
+            height: 36px;
           `
           : css`
             min-width: 0px;
-            width: 36px;
+            width: 25px;
+            height: 25px;
           `
   }
   &.active{

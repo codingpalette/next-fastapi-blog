@@ -29,6 +29,10 @@ export const globalStyles = css`
   
   html{
     background-image: url("/images/etc/back_pattern.png");
+    //background-color: #C8C2AA;
+    //background-size: 4px 4px;
+    //background-image: linear-gradient(90deg, transparent, transparent 3px, rgba(0, 0, 0, 0.07) 4px), 
+    //linear-gradient(transparent, transparent 3px, rgba(0, 0, 0, 0.07) 4px);
   }
 
   * {

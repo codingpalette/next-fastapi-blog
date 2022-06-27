@@ -76,6 +76,7 @@ const Header = () => {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input placeholder="이메일" register={{...register("email")}}  />
+            <Input type="password" placeholder="비밀번호" register={{...register("email")}}  />
           </form>
         </div>
       </Modal>

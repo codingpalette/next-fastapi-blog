@@ -7,6 +7,7 @@ import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
 import {SubmitHandler, useForm} from "react-hook-form";
 import Modal from "../Modal";
 import Input from "../Input";
+import Form from "../Form";
 
 type Inputs = {
   email: string
@@ -74,10 +75,15 @@ const Header = () => {
         ]}
       >
         <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input placeholder="이메일" register={{...register("email")}}  />
-            <Input type="password" placeholder="비밀번호" register={{...register("email")}}  />
-          </form>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form.Item>
+              <Input placeholder="이메일" register={{...register("email")}}  />
+            </Form.Item>
+          </Form>
+          {/*<form onSubmit={handleSubmit(onSubmit)}>*/}
+          {/*  <Input placeholder="이메일" register={{...register("email")}}  />*/}
+          {/*  <Input type="password" placeholder="비밀번호" register={{...register("email")}}  />*/}
+          {/*</form>*/}
         </div>
       </Modal>
     </>

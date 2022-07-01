@@ -39,19 +39,49 @@ const Header = () => {
   // 인증 모달 닫기 이벤트
   const authModalClose = () => {
     setAuthModalActive(false)
+    authFormReset()
   }
-
+  // 인증 폼 리셋 이벤트
+  const authFormReset = () => {
+    setValue('email', '')
+    setValue('password', '')
+    setValue('nickname', '')
+  }
+  // 로그인, 회원가입 모드 값
+  const [authMode, setAuthMode] = useState('login')
+  // 모드 변경 이벤트
+  const authModeChange = () => {
+    setAuthMode(authMode === 'login' ? 'create' : 'login')
+  }
+  // 로그인, 회원가입 이벤트
   const onSubmit : SubmitHandler<Inputs> = async (data) => {
     const { email, password, nickname } = data
     try {
-      const res = await axios.post('/api/user', {
-        email,
-        password,
-        nickname
-      })
-      console.log(res)
-    } catch (e) {
-      console.error(e)
+      let res: any = ''
+      if (authMode === 'login') {
+        res = await axios.post('/api/user/login', {
+          email,
+          password
+        })
+      } else {
+        res = await axios.post('/api/user', {
+          email,
+          password,
+          nickname
+        })
+      }
+      if (res.data.result === 'success') {
+        alert(res.data.message)
+      }
+    } catch (e: any) {
+      // console.error(e)
+      if (e.response.data.detail) {
+        alert(e.response.data.detail.message)
+      } else {
+        alert('에러가 발생 했습니다.')
+      }
+    } finally {
+      authFormReset()
     }
   };
 
@@ -95,10 +125,15 @@ const Header = () => {
             <Form.Item label="비밀번호" name="password">
               <Input id="password" placeholder="비밀번호" type="password" register={{...register("password", { required: true })}}  />
             </Form.Item>
-            <Form.Item label="닉네임" name="nickname">
-              <Input id="nickname" placeholder="닉네임" register={{...register("nickname", { required: true })}}  />
-            </Form.Item>
+            {authMode === 'create' && (
+              <Form.Item label="닉네임" name="nickname">
+                <Input id="nickname" placeholder="닉네임" register={{...register("nickname", { required: true })}}  />
+              </Form.Item>
+            )}
           </Form>
+          <div className="flex justify-end">
+            <Button onClick={authModeChange}>{authMode === 'login' ? '회원가입 하기' : '로그인 하기'}</Button>
+          </div>
         </div>
       </Modal>
     </>

@@ -8,14 +8,16 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import Modal from "../Modal";
 import Input from "../Input";
 import Form from "../Form";
+import axios from "axios";
 
 type Inputs = {
   email: string
   password: string
+  nickname: string
 };
 
 const Header = () => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, formState: { errors }, setValue, handleSubmit } = useForm<Inputs>();
 
   // 사이드바 상태 값
   const [sideBarActive, setSideBarActive] = useState(false)
@@ -39,8 +41,18 @@ const Header = () => {
     setAuthModalActive(false)
   }
 
-  const onSubmit : SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit : SubmitHandler<Inputs> = async (data) => {
+    const { email, password, nickname } = data
+    try {
+      const res = await axios.post('/api/user', {
+        email,
+        password,
+        nickname
+      })
+      console.log(res)
+    } catch (e) {
+      console.error(e)
+    }
   };
 
   return(
@@ -78,16 +90,15 @@ const Header = () => {
         <div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Item label="이메일" name="email">
-              <Input id="email" placeholder="이메일" register={{...register("email")}}  />
+              <Input id="email" placeholder="이메일" register={{...register("email", { required: true })}}  />
             </Form.Item>
             <Form.Item label="비밀번호" name="password">
-              <Input id="password" placeholder="비밀번호" type="password" register={{...register("password")}}  />
+              <Input id="password" placeholder="비밀번호" type="password" register={{...register("password", { required: true })}}  />
+            </Form.Item>
+            <Form.Item label="닉네임" name="nickname">
+              <Input id="nickname" placeholder="닉네임" register={{...register("nickname", { required: true })}}  />
             </Form.Item>
           </Form>
-          {/*<form onSubmit={handleSubmit(onSubmit)}>*/}
-          {/*  <Input placeholder="이메일" register={{...register("email")}}  />*/}
-          {/*  <Input type="password" placeholder="비밀번호" register={{...register("email")}}  />*/}
-          {/*</form>*/}
         </div>
       </Modal>
     </>

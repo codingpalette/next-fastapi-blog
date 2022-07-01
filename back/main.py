@@ -1,16 +1,17 @@
 from typing import Optional
 from fastapi import FastAPI, Depends
 from routes import user
-
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database.connection import get_db, Base, engine
 from config import conf
+
 config = conf()
 
 app = FastAPI()
 
-def create_app():
 
+def create_app():
     Base.metadata.create_all(bind=engine)
     docs = config['DOCS']
     app = FastAPI(docs_url="/docs" if docs == 'True' else None, redoc_url=None)
@@ -19,10 +20,17 @@ def create_app():
         'http://localhost:3000',
     ]
 
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     @app.get("/")
     def read_root():
         return {"Hello": "World"}
-
 
     @app.get("/test")
     def read_root(db: Session = Depends(get_db)):
@@ -33,6 +41,5 @@ def create_app():
 
     return app
 
+
 app = create_app()
-
-

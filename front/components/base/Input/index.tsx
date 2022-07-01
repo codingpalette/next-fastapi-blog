@@ -9,10 +9,11 @@ interface InputProps {
   style?: React.CSSProperties
   defaultValue?: string
   register?: any
+  id?: string
 };
 
 
-const Input = ({type, placeholder, className, maxLength, style, defaultValue, register} : InputProps) => {
+const Input = ({type, placeholder, className, maxLength, style, defaultValue, register, id} : InputProps) => {
   return(
     <>
       <InputBox
@@ -22,6 +23,7 @@ const Input = ({type, placeholder, className, maxLength, style, defaultValue, re
         maxLength={maxLength}
         style={style}
         defaultValue={defaultValue}
+        id={id}
         {...register}
       />
     </>

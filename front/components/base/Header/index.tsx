@@ -11,6 +11,7 @@ import Form from "../Form";
 
 type Inputs = {
   email: string
+  password: string
 };
 
 const Header = () => {
@@ -76,8 +77,11 @@ const Header = () => {
       >
         <div>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Item>
-              <Input placeholder="이메일" register={{...register("email")}}  />
+            <Form.Item label="이메일" name="email">
+              <Input id="email" placeholder="이메일" register={{...register("email")}}  />
+            </Form.Item>
+            <Form.Item label="비밀번호" name="password">
+              <Input id="password" placeholder="비밀번호" type="password" register={{...register("password")}}  />
             </Form.Item>
           </Form>
           {/*<form onSubmit={handleSubmit(onSubmit)}>*/}

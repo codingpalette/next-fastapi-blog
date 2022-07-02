@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import Header from "../../components/base/Header";
 import {Pattern} from "./styles";
 import {useQuery, useQueryClient} from "react-query";
@@ -21,8 +21,7 @@ const MainContainer = ({children}: MainContainerProps) => {
   } = useQuery("user_check", () => fetcher("/api/user/check"), {
     onSuccess: (data) => {
       if (data) {
-        console.log(data)
-        // tokenRefresh()
+        tokenRefresh()
       }
     },
     onError: (e) => {
@@ -35,7 +34,7 @@ const MainContainer = ({children}: MainContainerProps) => {
       await fetcher(`/api/user/token/refresh`)
       onLoginSuccess()
     } catch (e) {
-      await axios.post("/api/auth/logout")
+      await axios.post("/api/user/logout")
       queryClient.setQueryData("user_check", undefined)
     }
   }

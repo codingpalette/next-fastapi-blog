@@ -25,7 +25,7 @@ const MainContainer = ({children}: MainContainerProps) => {
       }
     },
     onError: (e) => {
-      // navigate("/login")
+      queryClient.setQueryData("user_check", undefined)
     },
   })
 

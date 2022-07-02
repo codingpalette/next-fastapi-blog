@@ -17,7 +17,7 @@ const Header = () => {
   const queryClient = useQueryClient()
 
   const userData: IUser | undefined = queryClient.getQueryData('user_check')
-  
+
   const { register, formState: { errors }, setValue, handleSubmit } = useForm<UserBase>();
 
   // 사이드바 상태 값
@@ -92,7 +92,7 @@ const Header = () => {
     try {
       const res = await axios.post('/api/user/logout')
       if (res.data.result === "success") {
-        await queryClient.invalidateQueries('user_check')
+        queryClient.setQueryData("user_check", undefined)
         alert(res.data.message)
       }
     } catch (e: any) {

@@ -1,23 +1,24 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {useQueryClient} from "react-query";
 import {HeaderBox} from "./styles";
 import SideBar from "../SideBar";
 import Button from "../Button";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faUser} from "@fortawesome/free-solid-svg-icons";
-import {SubmitHandler, useForm} from "react-hook-form";
 import Modal from "../Modal";
 import Input from "../Input";
 import Form from "../Form";
 import axios from "axios";
+import {IUser, UserBase} from "../../../types/db";
 
-type Inputs = {
-  email: string
-  password: string
-  nickname: string
-};
 
 const Header = () => {
-  const { register, formState: { errors }, setValue, handleSubmit } = useForm<Inputs>();
+  const queryClient = useQueryClient()
+
+  const userData: IUser | undefined = queryClient.getQueryData('user_check')
+  
+  const { register, formState: { errors }, setValue, handleSubmit } = useForm<UserBase>();
 
   // 사이드바 상태 값
   const [sideBarActive, setSideBarActive] = useState(false)
@@ -54,7 +55,7 @@ const Header = () => {
     setAuthMode(authMode === 'login' ? 'create' : 'login')
   }
   // 로그인, 회원가입 이벤트
-  const onSubmit : SubmitHandler<Inputs> = async (data) => {
+  const onSubmit : SubmitHandler<UserBase> = async (data) => {
     const { email, password, nickname } = data
     try {
       let res: any = ''
@@ -71,6 +72,7 @@ const Header = () => {
         })
       }
       if (res.data.result === 'success') {
+        await queryClient.invalidateQueries('user_check')
         alert(res.data.message)
       }
     } catch (e: any) {
@@ -84,6 +86,23 @@ const Header = () => {
       authFormReset()
     }
   };
+
+  // 로그아웃 이벤트
+  const logOut = async () => {
+    try {
+      const res = await axios.post('/api/user/logout')
+      if (res.data.result === "success") {
+        await queryClient.invalidateQueries('user_check')
+        alert(res.data.message)
+      }
+    } catch (e: any) {
+      if (e.response.data.detail) {
+        alert(e.response.data.detail.message)
+      } else {
+        alert('에러가 발생 했습니다.')
+      }
+    }
+  }
 
   return(
     <>
@@ -112,28 +131,39 @@ const Header = () => {
           <Button key="back" onClick={authModalClose}>
             닫기
           </Button>,
-          <Button key="submit" onClick={handleSubmit(onSubmit)} >
-            확인
+          <Button key="submit" onClick={userData ? logOut : handleSubmit(onSubmit)} >
+            {userData ? '로그아웃' : authMode === 'login' ? '로그인' : '회원가입'}
           </Button>,
         ]}
       >
         <div>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Item label="이메일" name="email">
-              <Input id="email" placeholder="이메일" register={{...register("email", { required: true })}}  />
-            </Form.Item>
-            <Form.Item label="비밀번호" name="password">
-              <Input id="password" placeholder="비밀번호" type="password" register={{...register("password", { required: true })}}  />
-            </Form.Item>
-            {authMode === 'create' && (
-              <Form.Item label="닉네임" name="nickname">
-                <Input id="nickname" placeholder="닉네임" register={{...register("nickname", { required: true })}}  />
-              </Form.Item>
-            )}
-          </Form>
-          <div className="flex justify-end">
-            <Button onClick={authModeChange}>{authMode === 'login' ? '회원가입 하기' : '로그인 하기'}</Button>
-          </div>
+          {userData ? (
+            <>
+              <div>
+                {userData.nickname} 님 환영합니다.
+              </div>
+            </>
+          ) : (
+            <>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Item label="이메일" name="email">
+                  <Input id="email" placeholder="이메일" register={{...register("email", { required: true })}}  />
+                </Form.Item>
+                <Form.Item label="비밀번호" name="password">
+                  <Input id="password" placeholder="비밀번호" type="password" register={{...register("password", { required: true })}}  />
+                </Form.Item>
+                {authMode === 'create' && (
+                  <Form.Item label="닉네임" name="nickname">
+                    <Input id="nickname" placeholder="닉네임" register={{...register("nickname", { required: true })}}  />
+                  </Form.Item>
+                )}
+              </Form>
+              <div className="flex justify-end">
+                <Button onClick={authModeChange}>{authMode === 'login' ? '회원가입 하기' : '로그인 하기'}</Button>
+              </div>
+            </>
+          )}
+
         </div>
       </Modal>
     </>

@@ -29,6 +29,7 @@ async def user_check(request: Request):
     cookies = request.cookies
     access_token = cookies.get("access_token")
     refresh_token = cookies.get("refresh_token")
+    key = config['TOKEN_KEY']
 
     if not access_token or not refresh_token:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "인증실패"})
@@ -37,8 +38,9 @@ async def user_check(request: Request):
     if not token_check:
         return JSONResponse(status_code=401, content={"result": "fail", "message": "인증실패"})
 
+    decode = jwt.decode(token_check, key, algorithms=['HS256'])
     access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
-    content = {"result": "success", "message": "유저인증에 성공했습니다."}
+    content = decode
     response = JSONResponse(content=content)
     response.set_cookie(
         key="access_token",

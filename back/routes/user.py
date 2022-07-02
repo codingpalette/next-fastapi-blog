@@ -6,8 +6,13 @@ from database.connection import get_db
 from schemas import user
 from crud import crud_user
 from functions import token, func
+from config import conf
+from dotmap import DotMap
 import bcrypt
 import datetime
+import jwt
+
+config = conf()
 
 router = APIRouter(
     prefix="/user",
@@ -153,4 +158,48 @@ async def log_out(request: Request, db: Session = Depends(get_db)):
         return response
     else:
         raise HTTPException(status_code=501, detail={"result": "fail", "message": "로그아웃 실패"})
+
+
+# 토큰 갱신
+@router.get('/token/refresh', summary="토큰 갱신")
+async def token_refresh(request: Request, db: Session = Depends(get_db)):
+    """
+    :param request: \n
+    :param db: \n
+    :return:
+    """
+
+    cookies = request.cookies
+    access_token = cookies.get("access_token")
+    refresh_token = cookies.get("refresh_token")
+
+    if not access_token:
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "인증실패"})
+
+    try:
+        key = config['TOKEN_KEY']
+        decode = jwt.decode(access_token, key, algorithms=['HS256'])
+        jwt.decode(refresh_token, key, algorithms=['HS256'])
+        user_info = DotMap()
+        user_info.id = decode["id"]
+        user_info.email = decode["email"]
+        user_info.nickname = decode["nickname"]
+        user_info.level = decode["level"]
+        access_token = token.create_token('access_token', user_info)
+        access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        content = {"result": "success", "message": "갱신 성공"}
+        response = JSONResponse(content=content)
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            secure=True,
+            httponly=True,
+            expires=access_token_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        )
+
+        return response
+
+    except jwt.ExpiredSignatureError:
+        return JSONResponse(status_code=401, content={"result": "fail", "message": "인증실패"})
+
 

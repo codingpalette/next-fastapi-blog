@@ -1,7 +1,7 @@
 import React from 'react'
 import MainContainer from "../../containers/MainContainer";
 
-const postWrite = () => {
+const PostWrite = () => {
   return(
     <>
       <MainContainer>
@@ -11,4 +11,4 @@ const postWrite = () => {
   )
 }
 
-export default postWrite
+export default PostWrite

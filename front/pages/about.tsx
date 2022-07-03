@@ -1,11 +1,12 @@
 import React from 'react'
+import MainContainer from "../containers/MainContainer";
 
 const About = () => {
   return(
     <>
-      <div>
-        sfsdf
-      </div>
+      <MainContainer>
+        About
+      </MainContainer>
     </>
   )
 }

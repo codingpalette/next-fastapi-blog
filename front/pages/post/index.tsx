@@ -11,11 +11,6 @@ const Post = () => {
 
   const {data: userData} = useQuery<IUser | undefined>("user_check", () => fetcher("/api/user/check"))
 
-
-  useEffect(() => {
-    console.log('userData', userData)
-  }, [userData])
-
   return(
     <>
       <MainContainer>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from "../../components/base/Header";
-import {Pattern} from "./styles";
+import {ContentBox, Pattern} from "./styles";
 import {useQuery, useQueryClient} from "react-query";
 import fetcher from "../../lib/fetcher";
 import axios from "axios";
@@ -56,10 +56,9 @@ const MainContainer = ({children}: MainContainerProps) => {
             <div className="pattern-inner"></div>
           </div>
         </Pattern>
-        <div>
+        <ContentBox className="p-4">
           {children}
-        </div>
-
+        </ContentBox>
       </div>
     </>
   )

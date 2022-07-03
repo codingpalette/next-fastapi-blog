@@ -13,3 +13,7 @@ export const Pattern = styled.div`
     background-repeat: repeat-x;
   }
 `
+
+export const ContentBox = styled.div`
+  
+`

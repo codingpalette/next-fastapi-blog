@@ -6,6 +6,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import axios from 'axios'
+import Setting from "./_setting";
 import '../styles/globals.css'
 
 config.autoAddCss = false
@@ -30,7 +31,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <Global styles={globalStyles} />
-          <Component {...pageProps} />
+          <Setting>
+            <Component {...pageProps} />
+          </Setting>
         </Hydrate>
       </QueryClientProvider>
     </>

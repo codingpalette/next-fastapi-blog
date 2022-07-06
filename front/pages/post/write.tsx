@@ -1,11 +1,14 @@
 import React from 'react'
 import MainContainer from "../../containers/MainContainer";
+import PostContainer from "../../containers/PostContainer";
 
 const PostWrite = () => {
   return(
     <>
       <MainContainer>
-        포스트 작성
+        <PostContainer>
+          
+        </PostContainer>
       </MainContainer>
     </>
   )

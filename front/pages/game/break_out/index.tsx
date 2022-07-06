@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react'
 import MainContainer from "../../../containers/MainContainer";
-import {CanvasBox} from "./styles";
 import {BallMovement} from "../../../components/game/BallMovement";
 import data from '../../../lib/game/break_out/data'
 
@@ -29,7 +28,7 @@ const BreakOut = () => {
   return(
     <>
       <MainContainer>
-        <CanvasBox ref={canvasRef} height="500px" />
+        asdasd
       </MainContainer>
     </>
   )

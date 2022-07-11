@@ -14,7 +14,7 @@ interface LayoutProps {
 const Layout = ({children}: LayoutProps) => {
   const [mode, setMode ] = useRecoilState(themeState)
 
-  const [pageLoading, setPageLoading] = useState(true)
+
 
   useEffect(() => {
     const localTheme: any = window.localStorage.getItem("theme")
@@ -23,7 +23,6 @@ const Layout = ({children}: LayoutProps) => {
     } else {
       setMode('light')
     }
-    setPageLoading(false)
   }, [])
 
   const theme = React.useMemo(() =>
@@ -40,17 +39,15 @@ const Layout = ({children}: LayoutProps) => {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {!pageLoading && (
-          <Box sx={{
-            width:'100%',
-            height: '100%',
-            bgcolor: 'background.default',
-            color: 'text.primary',
-          }}>
-            {children}
-          </Box>
-        )}
-
+        <Box sx={{
+          width:'100%',
+          height: '100%',
+          minHeight: '100%',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+        }}>
+          {children}
+        </Box>
       </ThemeProvider>
     </>
   )

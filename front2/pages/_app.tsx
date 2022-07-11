@@ -6,6 +6,8 @@ import {RecoilRoot} from "recoil";
 
 import Layout from "../components/Layout";
 
+import '../styles/globals.css'
+
 
 
 

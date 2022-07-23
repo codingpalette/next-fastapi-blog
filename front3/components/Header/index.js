@@ -8,7 +8,7 @@ import {
   List,
   ListItem,
   ListItemButton, ListItemIcon, ListItemText,
-  Modal, TextField,
+  Modal, Snackbar, TextField,
   Toolbar,
   Typography
 } from "@mui/material";
@@ -20,6 +20,7 @@ import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
 import axios from "axios";
+import AlertBox from "../AlertBox";
 
 const Header = () => {
   const { control, handleSubmit, setValue, reset } = useForm({
@@ -51,7 +52,11 @@ const Header = () => {
       const res = await axios.post('/api/user/login', data)
       console.log(res)
     } catch (e) {
-      console.log(e)
+      if (e.response.data.detail) {
+        alertOpen('error', e.response.data.detail.message)
+      } else {
+        alertOpen('error', '에러가 발생 했습니다.')
+      }
     }
   }
 
@@ -73,6 +78,23 @@ const Header = () => {
   const themeChange = () => {
     localStorage.setItem('theme', useTheme === 'light' ? 'dark' : 'light')
     setUseTheme(useTheme === 'light' ? 'dark' : 'light')
+  }
+
+  // 경고창 상태 값
+  const [alertActive, setAlertActive] = useState(false)
+  // 경고창 텍스트
+  const [alertText, setAlertText] = useState('')
+  // 경고창 종류
+  const [alertType, setAlertType] = useState('success')
+  // 경고창 열기 이벤트
+  const alertOpen = (type, text) => {
+    setAlertType(type)
+    setAlertText(text)
+    setAlertActive(true)
+  }
+  // 경고창 닫기 이벤트
+  const alertClose = () => {
+    setAlertActive(false)
   }
 
   return(
@@ -167,6 +189,7 @@ const Header = () => {
           />
         </Box>
       </ModalBox>
+      <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )
 }

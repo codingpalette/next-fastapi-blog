@@ -1,1 +1,5 @@
-* { font-family: 'Spoqa Han Sans Neo', 'sans-serif'; }
+html, body{
+    font-size: 14px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+}
+

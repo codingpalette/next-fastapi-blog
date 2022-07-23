@@ -2,13 +2,13 @@ import React, {useState} from 'react'
 import {
   AppBar,
   Box,
-  Button,
+  Button, CardActions, CardContent,
   Drawer,
   IconButton,
   List,
   ListItem,
   ListItemButton, ListItemIcon, ListItemText,
-  Modal,
+  Modal, TextField,
   Toolbar,
   Typography
 } from "@mui/material";
@@ -18,8 +18,15 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ModalBox from "../ModalBox";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
+import {useForm, Controller} from "react-hook-form";
 
 const Header = () => {
+  const { control, handleSubmit, setValue, reset } = useForm({
+    defaultValues: {
+      id: '',
+      password: '',
+    }
+  });
 
   // 로그인 모달 상태 값
   const [loginModalActive, setLoginModalActive] = useState(false)
@@ -29,8 +36,12 @@ const Header = () => {
   }
   // 로그인 모달 닫기 이벤트
   const loginModalClose = () => {
+    reset()
     setLoginModalActive(false)
   }
+
+  const onSubmit = data => console.log(data);
+
 
   // 사이드바 상태 값
   const [sideBarActive, setSideBarActive] = useState(false)
@@ -89,7 +100,60 @@ const Header = () => {
           </List>
         </Box>
       </Drawer>
-      <ModalBox modalActive={loginModalActive} modalClose={loginModalClose} />
+      <ModalBox
+        modalActive={loginModalActive}
+        modalClose={loginModalClose}
+        title="로그인"
+        footer={[
+          <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>,
+          <Button key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} >로그인</Button>
+        ]}
+      >
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Controller
+            name="id"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="아이디"
+                size="small"
+                fullWidth
+                sx={{marginBottom: '1rem'}}
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+            rules={{ required: '아이디를 입력해 주세요.' }}
+          />
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="비밀번호"
+                size="small"
+                type="password"
+                fullWidth
+                // sx={{marginBottom: '1rem'}}
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+            rules={{ required: '아이디를 입력해 주세요.' }}
+          />
+        </Box>
+      </ModalBox>
     </>
   )
 }

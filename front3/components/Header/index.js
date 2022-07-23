@@ -19,11 +19,12 @@ import ModalBox from "../ModalBox";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
+import axios from "axios";
 
 const Header = () => {
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
-      id: '',
+      email: '',
       password: '',
     }
   });
@@ -39,8 +40,20 @@ const Header = () => {
     reset()
     setLoginModalActive(false)
   }
-
-  const onSubmit = data => console.log(data);
+  // 로그인 이벤트
+  const onSubmit = async (value) => {
+    console.log(value)
+    const data = {
+      email: value.email,
+      password: value.password
+    }
+    try {
+      const res = await axios.post('/api/user/login', data)
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
 
   // 사이드바 상태 값
@@ -116,7 +129,7 @@ const Header = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Controller
-            name="id"
+            name="email"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (

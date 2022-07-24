@@ -27,8 +27,7 @@ import {AccountCircle} from "@mui/icons-material";
 
 const Header = () => {
   // 유저 정보 가져오기
-  const { data: userData, mutate: userMutate } = useSWR('/api/user/check', fetcher)
-
+  const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
   // 유저 메뉴 상태 값
   const [userMenuActive, setUserMenuActive] = useState(null)
   // 유저 메뉴 열기 이벤트
@@ -70,6 +69,22 @@ const Header = () => {
       const res = await axios.post('/api/user/login', data)
       console.log(res)
       await userMutate()
+      loginModalClose()
+    } catch (e) {
+      if (e.response.data.detail) {
+        alertOpen('error', e.response.data.detail.message)
+      } else {
+        alertOpen('error', '에러가 발생 했습니다.')
+      }
+    }
+  }
+  // 로그아웃 이벤트
+  const logOut = async () => {
+    try {
+      const res = await axios.post('/api/user/logout')
+      console.log(res)
+      await userMutate()
+      userMenuClose()
     } catch (e) {
       if (e.response.data.detail) {
         alertOpen('error', e.response.data.detail.message)
@@ -133,7 +148,7 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Blog
           </Typography>
-          {userData ? (
+          {!userError && userData ? (
             <div>
               <IconButton
                 size="large"
@@ -157,7 +172,7 @@ const Header = () => {
                 onClose={userMenuClose}
               >
                 <MenuItem onClick={userMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={userMenuClose}>My account</MenuItem>
+                <MenuItem onClick={logOut}>로그아웃</MenuItem>
               </Menu>
             </div>
           ): (

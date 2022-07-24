@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   AppBar,
   Box,
@@ -7,7 +7,7 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemButton, ListItemIcon, ListItemText,
+  ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem,
   Modal, Snackbar, TextField,
   Toolbar,
   Typography
@@ -21,8 +21,26 @@ import {themeState} from "../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
 import axios from "axios";
 import AlertBox from "../AlertBox";
+import useSWR from "swr";
+import fetcher from "../../utils/fetcher";
+import {AccountCircle} from "@mui/icons-material";
 
 const Header = () => {
+  // 유저 정보 가져오기
+  const { data: userData, mutate: userMutate } = useSWR('/api/user/check', fetcher)
+
+  // 유저 메뉴 상태 값
+  const [userMenuActive, setUserMenuActive] = useState(null)
+  // 유저 메뉴 열기 이벤트
+  const userMenuOpen = (event) => {
+    setUserMenuActive(event.currentTarget)
+  }
+  // 유저 메뉴 닫기 이벤트
+  const userMenuClose = () => {
+    setUserMenuActive(null)
+  }
+
+  // 로그인 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       email: '',
@@ -51,6 +69,7 @@ const Header = () => {
     try {
       const res = await axios.post('/api/user/login', data)
       console.log(res)
+      await userMutate()
     } catch (e) {
       if (e.response.data.detail) {
         alertOpen('error', e.response.data.detail.message)
@@ -114,7 +133,36 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Blog
           </Typography>
-          <Button color="inherit" onClick={loginModalOpen}>Login</Button>
+          {userData ? (
+            <div>
+              <IconButton
+                size="large"
+                onClick={userMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                anchorEl={userMenuActive}
+                open={Boolean(userMenuActive)}
+                onClose={userMenuClose}
+              >
+                <MenuItem onClick={userMenuClose}>Profile</MenuItem>
+                <MenuItem onClick={userMenuClose}>My account</MenuItem>
+              </Menu>
+            </div>
+          ): (
+            <Button color="inherit" onClick={loginModalOpen}>Login</Button>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer

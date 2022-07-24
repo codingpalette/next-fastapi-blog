@@ -20,7 +20,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.33.1",
-    "recoil": "^0.7.4"
+    "recoil": "^0.7.4",
+    "swr": "^1.3.0"
   },
   "devDependencies": {
     "eslint": "8.20.0",

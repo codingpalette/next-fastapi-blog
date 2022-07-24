@@ -2,6 +2,7 @@ import React from "react";
 import Head from 'next/head';
 import {RecoilRoot} from "recoil";
 import { CacheProvider } from '@emotion/react';
+import useSWR, { SWRConfig } from 'swr'
 import createEmotionCache from '../src/createEmotionCache';
 import axios from 'axios'
 import '../styles/globals.css'
@@ -17,16 +18,22 @@ export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
 
+
   return (
     <RecoilRoot>
       <CacheProvider value={emotionCache}>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
-        <Component {...pageProps} />
+        <SWRConfig
+          value={{
+            // refreshInterval: 3000,
+          }}
+        >
+          <Component {...pageProps} />
+        </SWRConfig>
       </CacheProvider>
     </RecoilRoot>
-
   );
 }
 

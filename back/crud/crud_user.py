@@ -8,7 +8,7 @@ from schemas import user
 def user_set(db: Session, post_data: user.UserSet) -> User:
     try:
         db_obj = User(
-            email=post_data.email,
+            login_id=post_data.login_id,
             nickname=post_data.nickname,
             password=post_data.password
         )
@@ -21,10 +21,10 @@ def user_set(db: Session, post_data: user.UserSet) -> User:
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
 
 
-# 이메일 체크 함수
-def user_get_email(db: Session, email: user.UserBase) -> User:
+# 로그인 아이디 체크 함수
+def user_get_login_id(db: Session, login_id: user.UserBase) -> User:
     try:
-        return db.query(User).filter(User.email == email).first()
+        return db.query(User).filter(User.login_id == login_id).first()
     except Exception as e:
         # print(e)
         raise HTTPException(status_code=500,  detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
@@ -51,7 +51,7 @@ def user_get_id(db: Session, id: int) -> User:
 # 리프레시 토큰 업데이트
 def token_update(db: Session, post_data: user.UserBase, refresh_token: str) -> User:
     try:
-        user_info = user_get_email(db, post_data)
+        user_info = user_get_login_id(db, post_data)
         user_info.refresh_token = refresh_token
         db.commit()
         db.refresh(user_info)

@@ -25,6 +25,7 @@ import AlertBox from "../AlertBox";
 import useSWR from "swr";
 import fetcher from "../../utils/fetcher";
 import {AccountCircle} from "@mui/icons-material";
+import {login} from "../../apis/user";
 
 const Header = () => {
   // 유저 정보 가져오기
@@ -43,8 +44,10 @@ const Header = () => {
   // 로그인 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
-      email: '',
+      login_id: '',
+      nickname: '',
       password: '',
+      password_check: ''
     }
   });
 
@@ -57,32 +60,31 @@ const Header = () => {
   // 로그인 모달 닫기 이벤트
   const loginModalClose = () => {
     reset()
+    setLoginModalMode('login')
     setLoginModalActive(false)
+  }
+  // 로그인 모달 모드 값
+  const [loginModalMode, setLoginModalMode] = useState('login')
+  // 로그인 모달 모드 변경 이벤트
+  const loginModalModeChange = () => {
+    setLoginModalMode(loginModalMode === 'login' ? 'join' : 'login')
   }
   // 버튼 로딩 상태 값
   const [buttonLoading, setButtonLoading] = useState(false)
   // 로그인 이벤트
   const onSubmit = async (value) => {
-    console.log(value)
-    const data = {
-      email: value.email,
-      password: value.password
-    }
     setButtonLoading(true)
-    try {
-      const res = await axios.post('/api/user/login', data)
-      console.log(res)
-      await userMutate()
-      loginModalClose()
-
-    } catch (e) {
-      if (e.response.data.detail) {
-        alertOpen('error', e.response.data.detail.message)
-      } else {
-        alertOpen('error', '에러가 발생 했습니다.')
-      }
-    } finally {
+    const res = await login(value, loginModalMode)
+    if (res.data.result === "fail") {
+      alertOpen('error', res.data.message)
       setButtonLoading(false)
+      return
+    } else {
+      alertOpen('success', res.data.message)
+      setButtonLoading(false)
+      await userMutate()
+      setLoginModalMode('login')
+      loginModalClose()
     }
   }
   // 로그아웃 이벤트
@@ -208,10 +210,10 @@ const Header = () => {
       <ModalBox
         modalActive={loginModalActive}
         modalClose={loginModalClose}
-        title="로그인"
+        title={loginModalMode === 'login' ? '로그인' : '회원가입'}
         footer={[
           <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>,
-          <LoadingButton key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} loading={buttonLoading} >로그인</LoadingButton>
+          <LoadingButton key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} loading={buttonLoading} >{loginModalMode === 'login' ? '회원가입' : '로그인'}</LoadingButton>
         ]}
       >
         <Box
@@ -221,7 +223,7 @@ const Header = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Controller
-            name="email"
+            name="login_id"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -234,10 +236,30 @@ const Header = () => {
                 onChange={onChange}
                 error={!!error}
                 helperText={error ? error.message : null}
+                required
               />
             )}
-            rules={{ required: '아이디를 입력해 주세요.' }}
           />
+          {loginModalMode === 'join' && (
+            <Controller
+              name="nickname"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="닉네임"
+                  size="small"
+                  fullWidth
+                  sx={{marginBottom: '1rem'}}
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                />
+              )}
+            />
+          )}
           <Controller
             name="password"
             control={control}
@@ -248,15 +270,41 @@ const Header = () => {
                 size="small"
                 type="password"
                 fullWidth
-                // sx={{marginBottom: '1rem'}}
+                sx={{marginBottom: '1rem'}}
                 value={value}
                 onChange={onChange}
                 error={!!error}
                 helperText={error ? error.message : null}
+                required
               />
             )}
-            rules={{ required: '아이디를 입력해 주세요.' }}
           />
+          {loginModalMode === 'join' && (
+            <Controller
+              name="password_check"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="비밀번호 확인"
+                  size="small"
+                  type="password"
+                  fullWidth
+                  // sx={{marginBottom: '1rem'}}
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                />
+              )}
+            />
+          )}
+        </Box>
+        <Box sx={{marginTop: '24px', display: 'flex', justifyContent: 'flex-end'}}>
+          <Button size="small" onClick={loginModalModeChange}>
+            {loginModalMode === 'login' ? '회원가입' : '로그인'}
+          </Button>
         </Box>
       </ModalBox>
       <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />

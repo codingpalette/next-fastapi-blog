@@ -67,10 +67,12 @@ async def user_set(request: Request, post_data: user.UserSet, db: Session = Depe
     if login_info:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
 
-    # 이메일 체크
-    email_info = crud_user.user_get_email(db, post_data.email)
-    if email_info:
-        raise HTTPException(status_code=401, detail={"result": "fail", "message": "이미 사용중인 이메일 입니다."})
+    print('3333')
+
+    # 로그인 아이디 체크
+    login_id_info = crud_user.user_get_login_id(db, post_data.login_id)
+    if login_id_info:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "이미 사용중인 아이디 입니다."})
 
     # 닉네임 체크
     nickname_info = crud_user.user_get_nickname(db, post_data.nickname)
@@ -100,20 +102,20 @@ async def user_login(request: Request, post_data: user.UserLogin, db: Session = 
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
 
     # 이메일 체크
-    email_info = crud_user.user_get_email(db, post_data.email)
-    if not email_info:
+    login_id_info = crud_user.user_get_login_id(db, post_data.login_id)
+    if not login_id_info:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "존재하지 않는 이메일 입니다."})
 
     # 패스워드 체크
-    password_check = bcrypt.checkpw(post_data.password.encode('utf-8'), email_info.password.encode('utf-8'))
+    password_check = bcrypt.checkpw(post_data.password.encode('utf-8'), login_id_info.password.encode('utf-8'))
     if not password_check:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "비밀번호가 틀립니다."})
 
     # 토큰 만들기
-    access_token = token.create_token('access_token', email_info)
-    refresh_token = token.create_token('refresh_token', email_info)
+    access_token = token.create_token('access_token', login_id_info)
+    refresh_token = token.create_token('refresh_token', login_id_info)
     # db에 토큰 업데이트
-    token_update = crud_user.token_update(db, email_info.email, refresh_token)
+    token_update = crud_user.token_update(db, login_id_info.email, refresh_token)
     if token_update:
         access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
         refresh_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=14)

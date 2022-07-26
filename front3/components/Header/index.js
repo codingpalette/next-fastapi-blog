@@ -12,6 +12,7 @@ import {
   Toolbar,
   Typography
 } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import MenuIcon from "@mui/icons-material/Menu";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -58,6 +59,8 @@ const Header = () => {
     reset()
     setLoginModalActive(false)
   }
+  // 버튼 로딩 상태 값
+  const [buttonLoading, setButtonLoading] = useState(false)
   // 로그인 이벤트
   const onSubmit = async (value) => {
     console.log(value)
@@ -65,17 +68,21 @@ const Header = () => {
       email: value.email,
       password: value.password
     }
+    setButtonLoading(true)
     try {
       const res = await axios.post('/api/user/login', data)
       console.log(res)
       await userMutate()
       loginModalClose()
+
     } catch (e) {
       if (e.response.data.detail) {
         alertOpen('error', e.response.data.detail.message)
       } else {
         alertOpen('error', '에러가 발생 했습니다.')
       }
+    } finally {
+      setButtonLoading(false)
     }
   }
   // 로그아웃 이벤트
@@ -204,7 +211,7 @@ const Header = () => {
         title="로그인"
         footer={[
           <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>,
-          <Button key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} >로그인</Button>
+          <LoadingButton key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} loading={buttonLoading} >로그인</LoadingButton>
         ]}
       >
         <Box

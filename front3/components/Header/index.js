@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
   AppBar,
   Box,
-  Button, CardActions, CardContent,
+  Button, CardActions, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Drawer,
   IconButton,
   List,
@@ -207,56 +207,29 @@ const Header = () => {
           </List>
         </Box>
       </Drawer>
-      <ModalBox
-        modalActive={loginModalActive}
-        modalClose={loginModalClose}
-        title={loginModalMode === 'login' ? '로그인' : '회원가입'}
-        footer={[
-          <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>,
-          <LoadingButton
-            key="submit"
-            type="submit"
-            size="small"
-            variant="contained"
-            onClick={handleSubmit(onSubmit)}
-            loading={buttonLoading}
-          >
-            {loginModalMode === 'login' ? '로그인' : '회원가입'}
-          </LoadingButton>
-        ]}
+      <Dialog
+        open={loginModalActive}
+        onClose={loginModalClose}
+        fullWidth
+        maxWidth="xs"
       >
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Controller
-            name="login_id"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                label="아이디"
-                size="small"
-                fullWidth
-                sx={{marginBottom: '1rem'}}
-                value={value}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-                required
-              />
-            )}
-          />
-          {loginModalMode === 'join' && (
+        <DialogTitle>
+          {loginModalMode === 'login' ? '로그인' : '회원가입'}
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Controller
-              name="nickname"
+              name="login_id"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="닉네임"
+                  label="아이디"
                   size="small"
                   fullWidth
                   sx={{marginBottom: '1rem'}}
@@ -268,38 +241,37 @@ const Header = () => {
                 />
               )}
             />
-          )}
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                label="비밀번호"
-                size="small"
-                type="password"
-                fullWidth
-                sx={{marginBottom: '1rem'}}
-                value={value}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-                required
+            {loginModalMode === 'join' && (
+              <Controller
+                name="nickname"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    label="닉네임"
+                    size="small"
+                    fullWidth
+                    sx={{marginBottom: '1rem'}}
+                    value={value}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    required
+                  />
+                )}
               />
             )}
-          />
-          {loginModalMode === 'join' && (
             <Controller
-              name="password_check"
+              name="password"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="비밀번호 확인"
+                  label="비밀번호"
                   size="small"
                   type="password"
                   fullWidth
-                  // sx={{marginBottom: '1rem'}}
+                  sx={{marginBottom: '1rem'}}
                   value={value}
                   onChange={onChange}
                   error={!!error}
@@ -308,14 +280,49 @@ const Header = () => {
                 />
               )}
             />
-          )}
-        </Box>
-        <Box sx={{marginTop: '24px', display: 'flex', justifyContent: 'flex-end'}}>
-          <Button size="small" onClick={loginModalModeChange}>
-            {loginModalMode === 'login' ? '회원가입' : '로그인'}
-          </Button>
-        </Box>
-      </ModalBox>
+            {loginModalMode === 'join' && (
+              <Controller
+                name="password_check"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    label="비밀번호 확인"
+                    size="small"
+                    type="password"
+                    fullWidth
+                    sx={{marginBottom: '1rem'}}
+                    value={value}
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                    required
+                  />
+                )}
+              />
+            )}
+          </Box>
+          <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+            <Button size="small" onClick={loginModalModeChange}>
+              {loginModalMode === 'login' ? '회원가입' : '로그인'}
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>
+          <LoadingButton
+            key="submit"
+            type="submit"
+            size="small"
+            variant="contained"
+            onClick={handleSubmit(onSubmit)}
+            loading={buttonLoading}
+          >
+            {loginModalMode === 'login' ? '로그인' : '회원가입'}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+
       <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )

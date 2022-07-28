@@ -14,12 +14,15 @@ export const login = async (value, mode) => {
   if (password === '') {
     return {"data": {"result": "fail", "message": "비밀번호를 입력해 주세요."}}
   }
-  if (password_check === '') {
-    return {"data": {"result": "fail", "message": "비밀번호 확인을 입력해 주세요."}}
+  if (mode === 'join') {
+    if (password_check === '') {
+      return {"data": {"result": "fail", "message": "비밀번호 확인을 입력해 주세요."}}
+    }
+    if (password !== password_check) {
+      return {"data": {"result": "fail", "message": "비밀번호가 서로 다릅니다."}}
+    }
   }
-  if (password !== password_check) {
-    return {"data": {"result": "fail", "message": "비밀번호가 서로 다릅니다."}}
-  }
+
   const data = {
     login_id,
     password

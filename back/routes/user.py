@@ -115,7 +115,7 @@ async def user_login(request: Request, post_data: user.UserLogin, db: Session = 
     access_token = token.create_token('access_token', login_id_info)
     refresh_token = token.create_token('refresh_token', login_id_info)
     # db에 토큰 업데이트
-    token_update = crud_user.token_update(db, login_id_info.email, refresh_token)
+    token_update = crud_user.token_update(db, login_id_info.login_id, refresh_token)
     if token_update:
         access_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
         refresh_token_time = datetime.datetime.utcnow() + datetime.timedelta(days=14)

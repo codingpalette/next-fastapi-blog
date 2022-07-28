@@ -213,7 +213,16 @@ const Header = () => {
         title={loginModalMode === 'login' ? '로그인' : '회원가입'}
         footer={[
           <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>,
-          <LoadingButton key="submit" type="submit" size="small" variant="contained" onClick={handleSubmit(onSubmit)} loading={buttonLoading} >{loginModalMode === 'login' ? '회원가입' : '로그인'}</LoadingButton>
+          <LoadingButton
+            key="submit"
+            type="submit"
+            size="small"
+            variant="contained"
+            onClick={handleSubmit(onSubmit)}
+            loading={buttonLoading}
+          >
+            {loginModalMode === 'login' ? '로그인' : '회원가입'}
+          </LoadingButton>
         ]}
       >
         <Box

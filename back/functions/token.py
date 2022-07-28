@@ -12,7 +12,7 @@ def create_token(type, user_info):
     # days->날짜 hours->시간, minutes->분, seconds->초
     payload = {
         "id": user_info.id,
-        "email": user_info.email,
+        "login_id": user_info.login_id,
         "nickname": user_info.nickname,
         "level": user_info.level,
     }

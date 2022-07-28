@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react'
 import {
   AppBar,
   Box,
-  Button, CardActions, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button, CardActions, CardContent, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Drawer,
   IconButton,
   List,
   ListItem,
-  ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem,
+  ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem,
   Modal, Snackbar, TextField,
   Toolbar,
   Typography
@@ -16,6 +16,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import MenuIcon from "@mui/icons-material/Menu";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import HomeIcon from '@mui/icons-material/Home';
+import ComputerIcon from '@mui/icons-material/Computer';
 import ModalBox from "../ModalBox";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
@@ -24,8 +26,9 @@ import axios from "axios";
 import AlertBox from "../AlertBox";
 import useSWR from "swr";
 import fetcher from "../../utils/fetcher";
-import {AccountCircle} from "@mui/icons-material";
+import {AccountCircle, ExpandLess, ExpandMore} from "@mui/icons-material";
 import {login} from "../../apis/user";
+import Link from "next/link";
 
 const Header = () => {
   // 유저 정보 가져오기
@@ -114,6 +117,16 @@ const Header = () => {
   const sideBarClose = () => {
     setSideBarActive(false)
   }
+  // 포스트 메뉴 상태 값
+  const [postMenuActive, setPostMenuActive] = useState(false)
+  // 포스트 메뉴 열기 토글 이벤트
+  const postMenuToggle = () => {
+    setPostMenuActive(!postMenuActive)
+  }
+  // 포스트 메뉴 닫기 이벤트
+  const postMenuClose = () => {
+    setPostMenuActive(true)
+  }
 
   // 테마 상태 값
   const [useTheme, setUseTheme] = useRecoilState(themeState)
@@ -195,7 +208,44 @@ const Header = () => {
         onClose={sideBarClose}
       >
         <Box sx={{width: '220px'}}>
-          <List>
+          <List
+            sx={{ width: '100%', bgcolor: 'background.paper' }}
+            component="nav"
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                coding palette
+              </ListSubheader>
+            }
+          >
+            <ListItem disablePadding>
+              <Link href="/" passHref>
+                <ListItemButton component="a">
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="HOME" />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+            <ListItemButton onClick={postMenuToggle}>
+              <ListItemIcon>
+                <ComputerIcon />
+              </ListItemIcon>
+              <ListItemText primary="POST" />
+              {postMenuActive ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={postMenuActive} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <Link href="/post" passHref>
+                  <ListItemButton component="a" sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="post" />
+                  </ListItemButton>
+                </Link>
+              </List>
+            </Collapse>
             <ListItem disablePadding>
               <ListItemButton onClick={themeChange}>
                 <ListItemIcon>

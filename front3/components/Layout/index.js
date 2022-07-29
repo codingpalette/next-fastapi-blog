@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, {useEffect, useMemo, useState} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import {ThemeProvider} from "@mui/material/styles";
-import {Button, Container, createTheme} from "@mui/material";
+import {Button, Card, CardContent, Container, createTheme, Paper} from "@mui/material";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {red} from "@mui/material/colors";
@@ -43,8 +43,10 @@ const Layout = ({ children }) => {
         </Head>
         <Header />
         <main>
-          <Container maxWidth="lg">
-            {children}
+          <Container maxWidth="lg" sx={{padding: '1rem'}}>
+            <Paper square elevation={3} sx={{padding: '1rem'}}>
+              {children}
+            </Paper>
           </Container>
         </main>
       </ThemeProvider>

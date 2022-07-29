@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, {useEffect, useMemo, useState} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import {ThemeProvider} from "@mui/material/styles";
-import {Button, createTheme} from "@mui/material";
+import {Button, Container, createTheme} from "@mui/material";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {red} from "@mui/material/colors";
@@ -42,12 +42,11 @@ const Layout = ({ children }) => {
           <meta name="theme-color" content={theme.palette.primary.main} />
         </Head>
         <Header />
-
-
-        <Button variant="contained">Contained</Button>
-        <Button variant="outlined">Outlined</Button>
-
-        <main>{children}</main>
+        <main>
+          <Container maxWidth="lg">
+            {children}
+          </Container>
+        </main>
       </ThemeProvider>
     </>
   )

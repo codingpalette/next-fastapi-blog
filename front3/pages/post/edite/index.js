@@ -5,7 +5,6 @@ const Edite = () => {
   return(
     <>
       <Layout>
-        edite
       </Layout>
     </>
   )

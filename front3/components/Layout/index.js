@@ -2,13 +2,25 @@ import Head from "next/head";
 import React, {useEffect, useMemo, useState} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import {ThemeProvider} from "@mui/material/styles";
-import {Button, Card, CardContent, Container, createTheme, Paper} from "@mui/material";
+import {
+  Breadcrumbs,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  createTheme,
+  IconButton,
+  Paper,
+  Typography
+} from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {red} from "@mui/material/colors";
 import Header from "../Header";
+import Link from "next/link";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title, subTitle }) => {
   const [useTheme, setUseTheme] = useRecoilState(themeState)
 
   const theme = useMemo(() =>
@@ -45,6 +57,19 @@ const Layout = ({ children }) => {
         <main>
           <Container maxWidth="lg" sx={{padding: '1rem'}}>
             <Paper square elevation={3} sx={{padding: '1rem'}}>
+              <Breadcrumbs aria-label="breadcrumb" sx={{marginBottom: '1rem'}}>
+                <Link href="/">
+                  <IconButton component="a" color="primary">
+                    <HomeIcon />
+                  </IconButton>
+                </Link>
+                {title && (
+                  <Typography color="text.primary">{title}</Typography>
+                )}
+                {subTitle && (
+                  <Typography color="text.primary">{subTitle}</Typography>
+                )}
+              </Breadcrumbs>
               {children}
             </Paper>
           </Container>

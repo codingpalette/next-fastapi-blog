@@ -25,6 +25,12 @@ const Layout = ({ children, title, subTitle }) => {
 
   const theme = useMemo(() =>
       createTheme({
+        typography: {
+          fontFamily: [
+            "Spoqa Han Sans Neo",
+            "sans-serif"
+          ].join(",")
+        },
         palette: {
           mode: useTheme,
           primary: {

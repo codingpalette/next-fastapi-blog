@@ -194,6 +194,9 @@ const Header = () => {
                 onClose={userMenuClose}
               >
                 <MenuItem onClick={userMenuClose}>Profile</MenuItem>
+                <Link href="/category_setting">
+                  <MenuItem component="a">카테고리 설정</MenuItem>
+                </Link>
                 <MenuItem onClick={logOut}>로그아웃</MenuItem>
               </Menu>
             </div>
@@ -266,12 +269,13 @@ const Header = () => {
         <DialogTitle>
           {loginModalMode === 'login' ? '로그인' : '회원가입'}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent >
           <Box
             component="form"
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
+            sx={{paddingTop: '10px'}}
           >
             <Controller
               name="login_id"

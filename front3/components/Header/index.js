@@ -266,17 +266,17 @@ const Header = () => {
         fullWidth
         maxWidth="xs"
       >
+        <Box
+          component="form"
+          // noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
         <DialogTitle>
           {loginModalMode === 'login' ? '로그인' : '회원가입'}
         </DialogTitle>
         <DialogContent >
-          <Box
-            component="form"
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{paddingTop: '10px'}}
-          >
+          <div style={{marginTop: '10px'}}>
             <Controller
               name="login_id"
               control={control}
@@ -355,7 +355,7 @@ const Header = () => {
                 )}
               />
             )}
-          </Box>
+          </div>
           <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
             <Button size="small" onClick={loginModalModeChange}>
               {loginModalMode === 'login' ? '회원가입' : '로그인'}
@@ -375,6 +375,7 @@ const Header = () => {
             {loginModalMode === 'login' ? '로그인' : '회원가입'}
           </LoadingButton>
         </DialogActions>
+        </Box>
       </Dialog>
 
       <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />

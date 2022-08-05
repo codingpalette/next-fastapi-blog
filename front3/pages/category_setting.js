@@ -59,83 +59,84 @@ const Category_setting = () => {
           maxWidth="xs"
         >
           <DialogTitle>카테고리 추가</DialogTitle>
-          <DialogContent>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              onSubmit={handleSubmit(onSubmit)}
-              sx={{paddingTop: '10px'}}
-            >
-              <Controller
-                name="category"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    label="카테고리"
-                    size="small"
-                    fullWidth
-                    sx={{marginBottom: '1rem'}}
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    required
-                  />
-                )}
-              />
-              <Controller
-                name="seq"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    label="순번"
-                    size="small"
-                    fullWidth
-                    sx={{marginBottom: '1rem'}}
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    required
-                  />
-                )}
-              />
-              <Controller
-                name="level"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                  <TextField
-                    label="레벨"
-                    size="small"
-                    fullWidth
-                    sx={{marginBottom: '1rem'}}
-                    value={value}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                    required
-                  />
-                )}
-              />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button key="back" size="small" variant="outlined" onClick={editeModalClose}>닫기</Button>
-            <LoadingButton
-              key="submit"
-              type="submit"
-              size="small"
-              variant="contained"
-              onClick={handleSubmit(onSubmit)}
-              loading={buttonLoading}
-            >
-              추가
-            </LoadingButton>
-          </DialogActions>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <DialogContent>
+              <div >
+                <Controller
+                  name="category"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="카테고리"
+                      size="small"
+                      fullWidth
+                      sx={{marginBottom: '1rem'}}
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      required
+                    />
+                  )}
+                />
+                <Controller
+                  name="seq"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="순번"
+                      size="small"
+                      fullWidth
+                      sx={{marginBottom: '1rem'}}
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      required
+                    />
+                  )}
+                />
+                <Controller
+                  name="level"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="레벨"
+                      size="small"
+                      fullWidth
+                      sx={{marginBottom: '1rem'}}
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      required
+                    />
+                  )}
+                />
+              </div>
+            </DialogContent>
+            <DialogActions>
+              <Button key="back" size="small" variant="outlined" onClick={editeModalClose}>닫기</Button>
+              <LoadingButton
+                key="submit"
+                type="submit"
+                size="small"
+                variant="contained"
+                onClick={handleSubmit(onSubmit)}
+                loading={buttonLoading}
+              >
+                추가
+              </LoadingButton>
+            </DialogActions>
+          </Box>
         </Dialog>
       </Layout>
     </>

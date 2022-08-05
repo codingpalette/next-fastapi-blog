@@ -67,8 +67,6 @@ async def user_set(request: Request, post_data: user.UserSet, db: Session = Depe
     if login_info:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
 
-    print('3333')
-
     # 로그인 아이디 체크
     login_id_info = crud_user.user_get_login_id(db, post_data.login_id)
     if login_id_info:

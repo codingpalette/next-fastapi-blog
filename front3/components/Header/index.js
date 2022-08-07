@@ -194,9 +194,11 @@ const Header = () => {
                 onClose={userMenuClose}
               >
                 <MenuItem onClick={userMenuClose}>Profile</MenuItem>
-                <Link href="/category_setting">
-                  <MenuItem component="a">카테고리 설정</MenuItem>
-                </Link>
+                {userData.level >= 10 && (
+                  <Link href="/category_setting">
+                    <MenuItem component="a">카테고리 설정</MenuItem>
+                  </Link>
+                )}
                 <MenuItem onClick={logOut}>로그아웃</MenuItem>
               </Menu>
             </div>

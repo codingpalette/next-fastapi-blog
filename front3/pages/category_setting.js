@@ -1,10 +1,17 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Layout from "../components/Layout";
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import LoadingButton from "@mui/lab/LoadingButton";
+import useSWR from "swr";
+import fetcher from "../utils/fetcher";
+import {useRouter} from "next/router";
 
 const Category_setting = () => {
+  const router = useRouter()
+
+  // 유저 정보 가져오기
+  const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
 
   // 카테고리 추가 모달 상태 값
   const [editeModalActive, setEditeModalActive] = useState(false)
@@ -32,6 +39,14 @@ const Category_setting = () => {
   const onSubmit = async (value) => {
     setButtonLoading(true)
 
+  }
+
+  if (userError) {
+    router.push("/")
+  }
+  if (!userData) return <div>loading...</div>
+  if (userData && userData.level < 10) {
+    router.push("/")
   }
 
   return(

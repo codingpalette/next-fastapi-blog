@@ -5,3 +5,4 @@ from pydantic import BaseModel
 class CategorySet(BaseModel):
     category: str
     seq: int
+    level: int

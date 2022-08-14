@@ -15,3 +15,10 @@ async def login_info_get(request):
         return False
 
     return login_info
+
+
+# 유저 권한 체크
+async def user_authority_check(login_info, level):
+    if login_info['level'] < level:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "권한이 없습니다."})
+    return True

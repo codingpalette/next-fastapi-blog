@@ -33,5 +33,5 @@ async def category_sort(db: Session) -> Category:
 
         return True
     except Exception as e:
-        # print(e)
+        print(e)
         raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})

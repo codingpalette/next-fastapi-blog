@@ -6,12 +6,15 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import useSWR from "swr";
 import fetcher from "../utils/fetcher";
 import {useRouter} from "next/router";
+import {category_set} from "../apis/category";
+import AlertBox from "../components/AlertBox";
 
 const Category_setting = () => {
   const router = useRouter()
 
   // 유저 정보 가져오기
   const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
+
 
   // 카테고리 추가 모달 상태 값
   const [editeModalActive, setEditeModalActive] = useState(false)
@@ -35,10 +38,38 @@ const Category_setting = () => {
 
   // 버튼 로딩 상태 값
   const [buttonLoading, setButtonLoading] = useState(false)
-  // 로그인 이벤트
+  // 카테고리 추가 이벤트
   const onSubmit = async (value) => {
+    // console.log('222')
     setButtonLoading(true)
+    const res = await category_set(value)
+    if (res.data.result === "fail") {
+      alertOpen('error', res.data.message)
+      setButtonLoading(false)
+      return
+    } else {
+      alertOpen('success', res.data.message)
+      setButtonLoading(false)
+      editeModalClose()
+    }
 
+  }
+
+  // 경고창 상태 값
+  const [alertActive, setAlertActive] = useState(false)
+  // 경고창 텍스트
+  const [alertText, setAlertText] = useState('')
+  // 경고창 종류
+  const [alertType, setAlertType] = useState('success')
+  // 경고창 열기 이벤트
+  const alertOpen = (type, text) => {
+    setAlertType(type)
+    setAlertText(text)
+    setAlertActive(true)
+  }
+  // 경고창 닫기 이벤트
+  const alertClose = () => {
+    setAlertActive(false)
   }
 
   if (userError) {
@@ -73,15 +104,15 @@ const Category_setting = () => {
           fullWidth
           maxWidth="xs"
         >
-          <DialogTitle>카테고리 추가</DialogTitle>
           <Box
             component="form"
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >
+            <DialogTitle>카테고리 추가</DialogTitle>
             <DialogContent>
-              <div >
+              <div style={{marginTop: '10px'}}>
                 <Controller
                   name="category"
                   control={control}
@@ -154,6 +185,8 @@ const Category_setting = () => {
           </Box>
         </Dialog>
       </Layout>
+
+      <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )
 }

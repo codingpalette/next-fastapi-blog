@@ -274,10 +274,10 @@ const Header = () => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-        <DialogTitle>
-          {loginModalMode === 'login' ? '로그인' : '회원가입'}
-        </DialogTitle>
-        <DialogContent >
+          <DialogTitle>
+            {loginModalMode === 'login' ? '로그인' : '회원가입'}
+          </DialogTitle>
+          <DialogContent >
           <div style={{marginTop: '10px'}}>
             <Controller
               name="login_id"
@@ -364,7 +364,7 @@ const Header = () => {
             </Button>
           </Box>
         </DialogContent>
-        <DialogActions>
+          <DialogActions>
           <Button key="back" size="small" variant="outlined" onClick={loginModalClose}>닫기</Button>
           <LoadingButton
             key="submit"

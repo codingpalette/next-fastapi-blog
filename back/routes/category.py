@@ -7,11 +7,6 @@ import schemas
 from crud import crud_catetory
 from functions import token, func
 from config import conf
-from dotmap import DotMap
-import bcrypt
-import datetime
-import jwt
-
 
 config = conf()
 
@@ -30,7 +25,10 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
     # 권한 체크
     await func.user_authority_check(login_info, 10)
 
-    return True
-
     # 카테고리 생성
-    # return await crud_catetory.category_set(db, post_data)
+    await crud_catetory.category_set(db, post_data)
+
+    # 카테고리 순서 정렬
+    await crud_catetory.category_sort(db)
+
+    return JSONResponse({"result": "success", "message": "카테고리 생성 성공"})

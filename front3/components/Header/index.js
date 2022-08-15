@@ -132,7 +132,7 @@ const Header = () => {
   const [useTheme, setUseTheme] = useRecoilState(themeState)
   // 테마 변경 이벤트
   const themeChange = () => {
-    localStorage.setItem('theme', useTheme === 'light' ? 'dark' : 'light')
+    localStorage.setItem('blog_theme', useTheme === 'light' ? 'dark' : 'light')
     setUseTheme(useTheme === 'light' ? 'dark' : 'light')
   }
 

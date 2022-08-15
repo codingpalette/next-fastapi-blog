@@ -47,7 +47,7 @@ const Layout = ({ children, title, subTitle }) => {
     [useTheme]);
 
   useEffect(() => {
-    const localTheme = localStorage.getItem("theme") || "light"
+    const localTheme = localStorage.getItem("blog_theme") || "light"
     setUseTheme(localTheme)
   }, [])
 

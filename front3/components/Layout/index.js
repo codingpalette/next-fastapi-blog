@@ -17,7 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import {useRecoilState} from "recoil";
 import {themeState} from "../../stores/themeState";
 import {red} from "@mui/material/colors";
-import Header from "../Header";
+import Header from "../base/Header";
 import Link from "next/link";
 
 const Layout = ({ children, title, subTitle }) => {

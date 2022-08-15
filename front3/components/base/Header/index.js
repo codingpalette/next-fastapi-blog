@@ -18,16 +18,16 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HomeIcon from '@mui/icons-material/Home';
 import ComputerIcon from '@mui/icons-material/Computer';
-import ModalBox from "../ModalBox";
+import ModalBox from "../../ModalBox";
 import {useRecoilState} from "recoil";
-import {themeState} from "../../stores/themeState";
+import {themeState} from "../../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
 import axios from "axios";
 import AlertBox from "../AlertBox";
 import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
+import fetcher from "../../../utils/fetcher";
 import {AccountCircle, ExpandLess, ExpandMore} from "@mui/icons-material";
-import {login} from "../../apis/user";
+import {login} from "../../../apis/user";
 import Link from "next/link";
 
 const Header = () => {
@@ -195,7 +195,7 @@ const Header = () => {
               >
                 <MenuItem onClick={userMenuClose}>Profile</MenuItem>
                 {userData.level >= 10 && (
-                  <Link href="/category_setting">
+                  <Link href="/Users/lee/Desktop/code/next-fastapi-blog/front3/pages/category_setting">
                     <MenuItem component="a">카테고리 설정</MenuItem>
                   </Link>
                 )}
@@ -223,7 +223,7 @@ const Header = () => {
             }
           >
             <ListItem disablePadding>
-              <Link href="/" passHref>
+              <Link href="/Users/lee/Desktop/code/next-fastapi-blog/front3/pages" passHref>
                 <ListItemButton component="a">
                   <ListItemIcon>
                     <HomeIcon />

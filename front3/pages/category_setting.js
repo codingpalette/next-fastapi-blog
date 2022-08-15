@@ -1,20 +1,32 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, Suspense} from 'react'
 import Layout from "../components/Layout";
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField} from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField
+} from "@mui/material";
 import {Controller, useForm} from "react-hook-form";
 import LoadingButton from "@mui/lab/LoadingButton";
 import useSWR from "swr";
 import fetcher from "../utils/fetcher";
 import {useRouter} from "next/router";
 import {category_set} from "../apis/category";
-import AlertBox from "../components/AlertBox";
+import AlertBox from "../components/base/AlertBox";
+import ListTable from "../components/categorySetting/ListTable";
+import ErrorBoundary from "../components/base/ErrorBoundary";
+import ErrorResult from "../components/base/ErrorResult";
 
 const Category_setting = () => {
   const router = useRouter()
 
   // 유저 정보 가져오기
   const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
-
 
   // 카테고리 추가 모달 상태 값
   const [editeModalActive, setEditeModalActive] = useState(false)
@@ -89,6 +101,7 @@ const Category_setting = () => {
           // justifyContent="center"
           // alignItems="center"
           spacing={1}
+          marginBottom={2}
         >
           <Grid item>
             <Button variant="contained" onClick={editeModalOpen}>추가</Button>
@@ -97,6 +110,18 @@ const Category_setting = () => {
             <Button variant="contained" color="error">삭제</Button>
           </Grid>
         </Grid>
+
+        <ErrorBoundary fallback={<ErrorResult />}>
+          <Suspense
+            fallback={
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
+            }
+          >
+            <ListTable />
+          </Suspense>
+        </ErrorBoundary>
 
         <Dialog
           open={editeModalActive}

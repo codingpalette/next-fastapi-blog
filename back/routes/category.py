@@ -7,6 +7,7 @@ import schemas
 from crud import crud_catetory
 from functions import token, func
 from config import conf
+import time
 
 config = conf()
 
@@ -37,4 +38,6 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
 
 @router.get('/list', summary="카테고리 리스트")
 async def category_list(db: Session = Depends(get_db)):
+    time.sleep(3)
+    raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그인 후 이용해 주세요."})
     return await crud_catetory.category_list(db)

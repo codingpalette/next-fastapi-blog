@@ -14,6 +14,7 @@ router = APIRouter(
     prefix="/category",
 )
 
+
 # 카테고리 생성
 @router.post('', summary="카테고리 생성")
 async def category_set(request: Request, post_data: schemas.CategorySet, db: Session = Depends(get_db)):
@@ -32,3 +33,8 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
     await crud_catetory.category_sort(db)
 
     return JSONResponse({"result": "success", "message": "카테고리 생성 성공"})
+
+
+@router.get('/list', summary="카테고리 리스트")
+async def category_list(db: Session = Depends(get_db)):
+    return await crud_catetory.category_list(db)

@@ -195,7 +195,7 @@ const Header = () => {
               >
                 <MenuItem onClick={userMenuClose}>Profile</MenuItem>
                 {userData.level >= 10 && (
-                  <Link href="/Users/lee/Desktop/code/next-fastapi-blog/front3/pages/category_setting">
+                  <Link href="/category_setting">
                     <MenuItem component="a">카테고리 설정</MenuItem>
                   </Link>
                 )}
@@ -223,7 +223,7 @@ const Header = () => {
             }
           >
             <ListItem disablePadding>
-              <Link href="/Users/lee/Desktop/code/next-fastapi-blog/front3/pages" passHref>
+              <Link href="/" passHref>
                 <ListItemButton component="a">
                   <ListItemIcon>
                     <HomeIcon />

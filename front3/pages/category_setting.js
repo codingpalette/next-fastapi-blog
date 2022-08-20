@@ -21,6 +21,8 @@ import AlertBox from "../components/base/AlertBox";
 import ListTable from "../components/categorySetting/ListTable";
 import ErrorBoundary from "../components/base/ErrorBoundary";
 import ErrorResult from "../components/base/ErrorResult";
+import EditeModal from "../components/categorySetting/EditeModal";
+import DeleteModal from "../components/categorySetting/DeleteModal";
 
 const Category_setting = () => {
   const router = useRouter()
@@ -39,32 +41,23 @@ const Category_setting = () => {
     setEditeModalActive(false)
   }
 
-  // 로그인 폼 값
-  const { control, handleSubmit, setValue, reset } = useForm({
-    defaultValues: {
-      category: '',
-      seq: '',
-      level: '',
-    }
-  });
 
-  // 버튼 로딩 상태 값
-  const [buttonLoading, setButtonLoading] = useState(false)
-  // 카테고리 추가 이벤트
-  const onSubmit = async (value) => {
-    // console.log('222')
-    setButtonLoading(true)
-    const res = await category_set(value)
-    if (res.data.result === "fail") {
-      alertOpen('error', res.data.message)
-      setButtonLoading(false)
+  // 체크박스 리스트 값
+  const [selected, setSelected] = useState([]);
+
+  // 삭제 모달 생태 값
+  const [deleteModalActive, setDeleteModalActive] = useState(false)
+  // 삭제 모달 열기 이벤트
+  const deleteModalOpen = () => {
+    if (selected.length === 0) {
+      alertOpen('error', "삭제할 리스트를 선택해 주세요.")
       return
-    } else {
-      alertOpen('success', res.data.message)
-      setButtonLoading(false)
-      editeModalClose()
     }
-
+    setDeleteModalActive(true)
+  }
+  // 삭제 모달 닫기 이벤트
+  const deleteModalClose = () => {
+    setDeleteModalActive(false)
   }
 
   // 경고창 상태 값
@@ -107,7 +100,7 @@ const Category_setting = () => {
             <Button variant="contained" onClick={editeModalOpen}>추가</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="error">삭제</Button>
+            <Button variant="contained" color="error" onClick={deleteModalOpen}>삭제</Button>
           </Grid>
         </Grid>
 
@@ -119,97 +112,14 @@ const Category_setting = () => {
               </Box>
             }
           >
-            <ListTable />
+            <ListTable selected={selected} setSelected={setSelected} />
           </Suspense>
         </ErrorBoundary>
-
-        <Dialog
-          open={editeModalActive}
-          onClose={editeModalClose}
-          fullWidth
-          maxWidth="xs"
-        >
-          <Box
-            component="form"
-            noValidate
-            autoComplete="off"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <DialogTitle>카테고리 추가</DialogTitle>
-            <DialogContent>
-              <div style={{marginTop: '10px'}}>
-                <Controller
-                  name="category"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="카테고리"
-                      size="small"
-                      fullWidth
-                      sx={{marginBottom: '1rem'}}
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      required
-                    />
-                  )}
-                />
-                <Controller
-                  name="seq"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="순번"
-                      size="small"
-                      fullWidth
-                      sx={{marginBottom: '1rem'}}
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      required
-                    />
-                  )}
-                />
-                <Controller
-                  name="level"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="레벨"
-                      size="small"
-                      fullWidth
-                      sx={{marginBottom: '1rem'}}
-                      value={value}
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                      required
-                    />
-                  )}
-                />
-              </div>
-            </DialogContent>
-            <DialogActions>
-              <Button key="back" size="small" variant="outlined" onClick={editeModalClose}>닫기</Button>
-              <LoadingButton
-                key="submit"
-                type="submit"
-                size="small"
-                variant="contained"
-                onClick={handleSubmit(onSubmit)}
-                loading={buttonLoading}
-              >
-                추가
-              </LoadingButton>
-            </DialogActions>
-          </Box>
-        </Dialog>
       </Layout>
+
+      <EditeModal modalActive={editeModalActive} modalClose={editeModalClose}  />
+
+      <DeleteModal modalActive={deleteModalActive} modalClose={deleteModalClose} checkList={selected} />
 
       <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>

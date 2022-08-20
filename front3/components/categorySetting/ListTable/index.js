@@ -3,16 +3,13 @@ import useSWR from "swr";
 import fetcher from "../../../utils/fetcher";
 import {Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
-const ListTable = () => {
+const ListTable = ({selected, setSelected}) => {
   // 카테고리 리스트 가져오기
   const {
     data: categoryListData,
     error: categoryListError,
     mutate: categoryListMutate
   } = useSWR('/api/category/list', fetcher, { suspense: true })
-
-  // 체크박스 리스트 값
-  const [selected, setSelected] = useState([]);
 
   // 리스트 클릭 이벤트
   const listClick = (event, id) => {

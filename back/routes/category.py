@@ -56,4 +56,7 @@ async def category_delete(request: Request, post_data: schemas.CategoryDelete, d
     # 카테고리 삭제
     await crud_catetory.category_delete(db, post_data)
 
+    # 카테고리 순서 정렬
+    await crud_catetory.category_sort(db)
+
     return JSONResponse({"result": "success", "message": "카테고리 삭제 성공"})

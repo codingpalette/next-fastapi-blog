@@ -36,6 +36,24 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
     return JSONResponse({"result": "success", "message": "카테고리 생성 성공"})
 
 
+# 카테고리 리스트
 @router.get('/list', summary="카테고리 리스트")
 async def category_list(db: Session = Depends(get_db)):
     return await crud_catetory.category_list(db)
+
+
+# 카테고리 삭제
+@router.post('/delete', summary="카테고리 삭제")
+async def category_delete(request: Request, post_data: schemas.CategoryDelete, db: Session = Depends(get_db)):
+    # 로그인 여부 확인
+    login_info = await func.login_info_get(request)
+    if not login_info:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그인 후 이용해 주세요."})
+
+    # 권한 체크
+    await func.user_authority_check(login_info, 10)
+
+    # 카테고리 삭제
+    await crud_catetory.category_delete(db, post_data)
+
+    return JSONResponse({"result": "success", "message": "카테고리 삭제 성공"})

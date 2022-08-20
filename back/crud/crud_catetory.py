@@ -44,3 +44,15 @@ async def category_list(db: Session) -> Category:
     except Exception as e:
         # print(e)
         raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
+
+
+# 카테고리 삭제 함수
+async def category_delete(db: Session, post_data: schemas.CategoryDelete) -> Category:
+    try:
+        query = db.query(Category).filter(Category.id.in_(post_data.delete_ids))
+        query.delete(synchronize_session=False)
+        db.commit()
+        return True
+    except Exception as e:
+        # print(e)
+        raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})

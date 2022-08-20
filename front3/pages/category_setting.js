@@ -23,12 +23,17 @@ import ErrorBoundary from "../components/base/ErrorBoundary";
 import ErrorResult from "../components/base/ErrorResult";
 import EditeModal from "../components/categorySetting/EditeModal";
 import DeleteModal from "../components/categorySetting/DeleteModal";
+import {useRecoilState} from "recoil";
+import {singleCategory} from "../stores/categoryState";
 
 const Category_setting = () => {
   const router = useRouter()
 
   // 유저 정보 가져오기
   const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
+
+  // 카테고리 상세 데이터 값
+  const [useSingleCategory, setUseSingleCategory] = useRecoilState(singleCategory)
 
   // 카테고리 추가 모달 상태 값
   const [editeModalActive, setEditeModalActive] = useState(false)
@@ -39,6 +44,7 @@ const Category_setting = () => {
   // 카테고리 추가 모달 닫기 이벤트
   const editeModalClose = () => {
     setEditeModalActive(false)
+    setUseSingleCategory(null)
   }
 
 
@@ -112,7 +118,7 @@ const Category_setting = () => {
               </Box>
             }
           >
-            <ListTable selected={selected} setSelected={setSelected} />
+            <ListTable selected={selected} setSelected={setSelected} editeModalOpen={editeModalOpen} />
           </Suspense>
         </ErrorBoundary>
       </Layout>

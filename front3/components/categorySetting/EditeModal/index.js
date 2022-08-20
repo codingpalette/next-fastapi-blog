@@ -5,10 +5,13 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import {category_set} from "../../../apis/category";
 import {useSWRConfig} from "swr";
 import AlertBox from "../../base/AlertBox";
+import {useRecoilState} from "recoil";
+import {singleCategory} from "../../../stores/categoryState";
 
 const EditeModal = ({modalActive, modalClose}) => {
   const { mutate } = useSWRConfig()
-
+  // 카테고리 상세 데이터 값
+  const [useSingleCategory, setUseSingleCategory] = useRecoilState(singleCategory)
 
   // 로그인 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
@@ -16,6 +19,7 @@ const EditeModal = ({modalActive, modalClose}) => {
       category: '',
       seq: '',
       level: '',
+      id: null,
     }
   });
 
@@ -24,6 +28,17 @@ const EditeModal = ({modalActive, modalClose}) => {
       reset()
     }
   }, [modalActive])
+
+  // 상세 데이터가 있으면
+  useEffect(() => {
+    if (useSingleCategory) {
+      const {category, seq, level, id} = useSingleCategory
+      setValue('category',  category)
+      setValue('seq',  seq)
+      setValue('level',  level)
+      setValue('id', id)
+    }
+  }, [useSingleCategory])
 
 
   // 버튼 로딩 상태 값
@@ -76,7 +91,7 @@ const EditeModal = ({modalActive, modalClose}) => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <DialogTitle>카테고리 추가</DialogTitle>
+          <DialogTitle>카테고리 {useSingleCategory ? '수정' : '추가'}</DialogTitle>
           <DialogContent>
             <div style={{marginTop: '10px'}}>
               <Controller
@@ -147,7 +162,7 @@ const EditeModal = ({modalActive, modalClose}) => {
               onClick={handleSubmit(onSubmit)}
               loading={buttonLoading}
             >
-              추가
+              {useSingleCategory ? '수정' : '추가'}
             </LoadingButton>
           </DialogActions>
         </Box>

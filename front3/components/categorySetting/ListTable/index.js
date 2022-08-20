@@ -2,8 +2,15 @@ import React, {useState} from 'react'
 import useSWR from "swr";
 import fetcher from "../../../utils/fetcher";
 import {Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import AlertBox from "../../base/AlertBox";
+import {category_get} from "../../../apis/category";
+import {useRecoilState} from "recoil";
+import {singleCategory} from "../../../stores/categoryState";
 
-const ListTable = ({selected, setSelected}) => {
+const ListTable = ({selected, setSelected, editeModalOpen}) => {
+  // 카테고리 상세 데이터 값
+  const [useSingleCategory, setUseSingleCategory] = useRecoilState(singleCategory)
+
   // 카테고리 리스트 가져오기
   const {
     data: categoryListData,
@@ -12,8 +19,16 @@ const ListTable = ({selected, setSelected}) => {
   } = useSWR('/api/category/list', fetcher, { suspense: true })
 
   // 리스트 클릭 이벤트
-  const listClick = (event, id) => {
-    console.log('event', event)
+  const listClick = async (event, id) => {
+    event.stopPropagation()
+    const res = await category_get(id)
+    if (res.data.result === "fail") {
+      alertOpen('error', res.data.message)
+      return
+    } else {
+      setUseSingleCategory(res.data.data)
+      editeModalOpen()
+    }
   }
 
   // 체크 박스 클릭 이벤트
@@ -46,6 +61,22 @@ const ListTable = ({selected, setSelected}) => {
     setSelected([]);
   };
 
+  // 경고창 상태 값
+  const [alertActive, setAlertActive] = useState(false)
+  // 경고창 텍스트
+  const [alertText, setAlertText] = useState('')
+  // 경고창 종류
+  const [alertType, setAlertType] = useState('success')
+  // 경고창 열기 이벤트
+  const alertOpen = (type, text) => {
+    setAlertType(type)
+    setAlertText(text)
+    setAlertActive(true)
+  }
+  // 경고창 닫기 이벤트
+  const alertClose = () => {
+    setAlertActive(false)
+  }
 
   return(
     <>
@@ -76,7 +107,7 @@ const ListTable = ({selected, setSelected}) => {
                   hover
                   onClick={(event) => listClick(event, v.id)}
                   role="checkbox"
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -93,6 +124,8 @@ const ListTable = ({selected, setSelected}) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )
 }

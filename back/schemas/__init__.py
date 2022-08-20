@@ -1,1 +1,1 @@
-from .category import CategorySet, CategoryDelete
+from .category import CategorySet, CategoryDelete, CategoryPut

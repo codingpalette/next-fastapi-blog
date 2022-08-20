@@ -56,3 +56,26 @@ async def category_delete(db: Session, post_data: schemas.CategoryDelete) -> Cat
     except Exception as e:
         # print(e)
         raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
+
+
+# 카테고리 하나 가져오기 함수
+async def category_get(db: Session, id: int) -> Category:
+    try:
+        return db.query(Category).filter(Category.id == id).first()
+    except Exception as e:
+        # print(e)
+        raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})
+
+
+# 카테고리 수정 함수
+async def category_put(db: Session, post_data: schemas.CategoryPut) -> Category:
+    try:
+        category_info = await category_get(db, post_data.id)
+        category_info.category = post_data.category
+        category_info.seq = post_data.seq
+        category_info.level = post_data.level
+        db.commit()
+        db.refresh(category_info)
+        return category_info
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})

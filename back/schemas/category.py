@@ -10,3 +10,7 @@ class CategorySet(BaseModel):
 
 class CategoryDelete(BaseModel):
     delete_ids = []
+
+
+class CategoryPut(CategorySet):
+    id: int

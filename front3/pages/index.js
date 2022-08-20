@@ -3,7 +3,7 @@ import useSWR from "swr";
 import fetcher from "../utils/fetcher";
 
 export default function Home() {
-  const { data: events } = useSWR('/api/user/check', fetcher)
+  const { data: userData } = useSWR('/api/user/check', fetcher)
 
   return (
     <>

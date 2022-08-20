@@ -53,7 +53,7 @@ async def token_check(access_token, refresh_token):
             # print(decode)
             user_info = DotMap()
             user_info.id = decode["id"]
-            user_info.email = decode["email"]
+            user_info.login_id = decode["login_id"]
             user_info.nickname = decode["nickname"]
             user_info.level = decode["level"]
             return create_token('access_token', user_info)

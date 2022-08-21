@@ -1,11 +1,14 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import dynamic from "next/dynamic";
 import {useForm, Controller} from "react-hook-form";
 import Layout from "../../../components/Layout";
-import {Box, TextField} from "@mui/material";
+import {Box, MenuItem, TextField} from "@mui/material";
 import {login} from "../../../apis/user";
 
 import 'suneditor/dist/css/suneditor.min.css';
+import useSWR from "swr";
+import fetcher from "../../../utils/fetcher";
+import {useRouter} from "next/router";
 
 
 
@@ -15,17 +18,21 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 
 const Edite = () => {
+  const router = useRouter()
+
   const [content, setContent] = useState('')
 
-  // 로그인 폼 값
+  // 카테고리 리스트 가져오기
+  const {data: categoryList, mutate: categoryMutate} = useSWR('/api/category/list', fetcher)
+
+  // 포스트 작성 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       login_id: '',
-      nickname: '',
-      password: '',
-      password_check: ''
+      category_id: '',
     }
   });
+
 
   // 로그인 이벤트
   const onSubmit = async (value) => {
@@ -59,6 +66,33 @@ const Edite = () => {
               />
             )}
           />
+          {categoryList && (
+            <Controller
+              name="category_id"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="카테고리"
+                  size="small"
+                  fullWidth
+                  select
+                  sx={{marginBottom: '1rem'}}
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                >
+                  {categoryList && categoryList.map(v => (
+                    <MenuItem key={v.id} value={v.id}>
+                      {v.category}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          )}
         </Box>
 
         <SunEditor

@@ -3,6 +3,9 @@ import Layout from "../../../components/Layout";
 import {useRouter} from "next/router";
 import useSWR, {SWRConfig} from "swr";
 import fetcher from "../../../utils/fetcher";
+import styled from "@emotion/styled";
+import Link from "next/link";
+import {Button} from "@mui/material";
 
 const PostDev = ({fallback}) => {
   const router = useRouter()
@@ -17,20 +20,20 @@ const PostDev = ({fallback}) => {
 
   const [level, setLevel] = useState(1)
 
-  useEffect(() => {
-   console.log("fallback", fallback["/api/category/list"])
-  }, [fallback])
+  // useEffect(() => {
+  //  console.log("fallback", fallback["/api/category/list"])
+  // }, [fallback])
+  //
+  // useEffect(() => {
+  //   console.log('userData', userData)
+  // }, [userData])
+  //
+  // useEffect(() => {
+  //   console.log('categoryList', categoryList)
+  // }, [categoryList])
 
   useEffect(() => {
-    console.log('userData', userData)
-  }, [userData])
-
-  useEffect(() => {
-    console.log('categoryList', categoryList)
-  }, [categoryList])
-
-  useEffect(() => {
-    console.log(router)
+    console.log(router.query)
   }, [router])
 
 
@@ -38,6 +41,12 @@ const PostDev = ({fallback}) => {
     <>
       <SWRConfig value={{ fallback }}>
         <Layout>
+
+          <TopHeader>
+            <Link href='/post/edite' >
+              <Button variant="outlined" component="a">포스트 작성</Button>
+            </Link>
+          </TopHeader>
           <div>
             sfdsf
           </div>
@@ -46,6 +55,11 @@ const PostDev = ({fallback}) => {
     </>
   )
 }
+
+const TopHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
 
 export async function getStaticProps () {
   // `getStaticProps` is executed on the server side.

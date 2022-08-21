@@ -18,19 +18,20 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HomeIcon from '@mui/icons-material/Home';
 import ComputerIcon from '@mui/icons-material/Computer';
-import ModalBox from "../../ModalBox";
 import {useRecoilState} from "recoil";
 import {themeState} from "../../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
 import axios from "axios";
 import AlertBox from "../AlertBox";
-import useSWR from "swr";
+import useSWR, {useSWRConfig} from "swr";
 import fetcher from "../../../utils/fetcher";
 import {AccountCircle, ExpandLess, ExpandMore} from "@mui/icons-material";
 import {login} from "../../../apis/user";
 import Link from "next/link";
 
 const Header = () => {
+  const { mutate } = useSWRConfig()
+
   // 유저 정보 가져오기
   const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
   // 유저 메뉴 상태 값
@@ -43,6 +44,13 @@ const Header = () => {
   const userMenuClose = () => {
     setUserMenuActive(null)
   }
+
+  // 카테고리 리스트 가져오기
+  const {data: categoryList, mutate: categoryMutate} = useSWR('/api/category/list', fetcher)
+
+  useEffect(() => {
+    console.log('categoryList',categoryList)
+  }, [categoryList])
 
   // 로그인 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
@@ -86,6 +94,7 @@ const Header = () => {
       alertOpen('success', res.data.message)
       setButtonLoading(false)
       await userMutate()
+      await categoryMutate()
       setLoginModalMode('login')
       loginModalClose()
     }
@@ -93,9 +102,9 @@ const Header = () => {
   // 로그아웃 이벤트
   const logOut = async () => {
     try {
-      const res = await axios.post('/api/user/logout')
-      console.log(res)
+      await axios.post('/api/user/logout')
       await userMutate()
+      await categoryMutate()
       userMenuClose()
     } catch (e) {
       if (e.response.data.detail) {
@@ -236,19 +245,30 @@ const Header = () => {
               <ListItemIcon>
                 <ComputerIcon />
               </ListItemIcon>
-              <ListItemText primary="POST" />
+              <ListItemText primary="개발" />
               {postMenuActive ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={postMenuActive} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <Link href="/post" passHref>
+                <Link href={`/post/dev`} passHref>
                   <ListItemButton component="a" sx={{ pl: 4 }}>
-                    <ListItemIcon>
-                      <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="post" />
+                    <ListItemText primary="전체" />
                   </ListItemButton>
                 </Link>
+                {categoryList && categoryList.map(v => {
+                  const level = userData ? userData.level : 1;
+                  if (level >= v.level) {
+                    return (
+                      <Link href={`/post/dev?category=${v.category}`} passHref key={v.id}>
+                        <ListItemButton component="a" sx={{ pl: 4 }}>
+                          <ListItemText primary={v.category} />
+                        </ListItemButton>
+                      </Link>
+                    )
+                  } else {
+                    return null
+                  }
+                })}
               </List>
             </Collapse>
             <ListItem disablePadding>

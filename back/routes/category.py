@@ -39,7 +39,7 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
 
 # 카테고리 리스트
 @router.get('/list', summary="카테고리 리스트")
-async def category_list(db: Session = Depends(get_db)):
+async def category_list(request: Request, db: Session = Depends(get_db)):
     return await crud_catetory.category_list(db)
 
 
@@ -98,5 +98,5 @@ async def category_put(request: Request, post_data: schemas.CategoryPut, db: Ses
 
     # 카테고리 순서 정렬
     await crud_catetory.category_sort(db)
-    
+
     return JSONResponse({"result": "success", "message": "카테고리 수정 성공"})

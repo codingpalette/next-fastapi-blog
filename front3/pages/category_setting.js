@@ -11,12 +11,9 @@ import {
   Grid,
   TextField
 } from "@mui/material";
-import {Controller, useForm} from "react-hook-form";
-import LoadingButton from "@mui/lab/LoadingButton";
-import useSWR from "swr";
+import useSWR, {SWRConfig} from "swr";
 import fetcher from "../utils/fetcher";
 import {useRouter} from "next/router";
-import {category_set} from "../apis/category";
 import AlertBox from "../components/base/AlertBox";
 import ListTable from "../components/categorySetting/ListTable";
 import ErrorBoundary from "../components/base/ErrorBoundary";
@@ -26,7 +23,7 @@ import DeleteModal from "../components/categorySetting/DeleteModal";
 import {useRecoilState} from "recoil";
 import {singleCategory} from "../stores/categoryState";
 
-const Category_setting = () => {
+const Category_setting = ({fallback}) => {
   const router = useRouter()
 
   // 유저 정보 가져오기
@@ -93,7 +90,8 @@ const Category_setting = () => {
 
   return(
     <>
-      <Layout title="카테고리 설정">
+      <SWRConfig value={{ fallback }}>
+        <Layout title="카테고리 설정">
         <Grid
           container
           // direction="row"
@@ -122,6 +120,7 @@ const Category_setting = () => {
           </Suspense>
         </ErrorBoundary>
       </Layout>
+      </SWRConfig>
 
       <EditeModal modalActive={editeModalActive} modalClose={editeModalClose}  />
 
@@ -130,6 +129,20 @@ const Category_setting = () => {
       <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )
+}
+
+
+
+export async function getStaticProps () {
+  // `getStaticProps` is executed on the server side.
+  const categoryData = await fetcher('/api/category/list')
+  return {
+    props: {
+      fallback: {
+        '/api/category/list': categoryData
+      }
+    }
+  }
 }
 
 export default Category_setting;

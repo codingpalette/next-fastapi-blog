@@ -40,7 +40,14 @@ async def category_set(request: Request, post_data: schemas.CategorySet, db: Ses
 # 카테고리 리스트
 @router.get('/list', summary="카테고리 리스트")
 async def category_list(request: Request, db: Session = Depends(get_db)):
-    return await crud_catetory.category_list(db)
+    # 로그인 여부 확인
+    login_info = await func.login_info_get(request)
+
+    level = 1
+    if login_info:
+        level = login_info['level']
+
+    return await crud_catetory.category_list(db, level)
 
 
 # 카테고리 하나 가져오기

@@ -38,9 +38,9 @@ async def category_sort(db: Session) -> Category:
 
 
 # 카테고리 리스트 함수
-async def category_list(db: Session) -> Category:
+async def category_list(db: Session, level) -> Category:
     try:
-        return db.query(Category).order_by(Category.seq.asc()).all()
+        return db.query(Category).filter(Category.level <= level).order_by(Category.seq.asc()).all()
     except Exception as e:
         # print(e)
         raise HTTPException(status_code=500, detail={"result": "fail", "message": "서버에 문제가 발생했습니다"})

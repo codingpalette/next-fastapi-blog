@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react'
 import dynamic from "next/dynamic";
 import {useForm, Controller} from "react-hook-form";
 import Layout from "../../../components/Layout";
-import {Box, MenuItem, TextField} from "@mui/material";
+import {Box, Button, MenuItem, TextField} from "@mui/material";
 import {login} from "../../../apis/user";
-
 import 'suneditor/dist/css/suneditor.min.css';
 import useSWR from "swr";
 import fetcher from "../../../utils/fetcher";
 import {useRouter} from "next/router";
-
+import Link from "next/link";
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 
 
@@ -121,6 +121,19 @@ const Edite = () => {
             ]
           }}
         />
+        <Grid2 mt={2} xs display="flex" alignItems="center" justifyContent="space-between">
+          <Link href='/post/dev' >
+            <Button component="a">작성취소</Button>
+          </Link>
+          <Grid2 container spacing={2}>
+            <Grid2>
+              <Button color="info" variant="outlined">임시저장</Button>
+            </Grid2>
+            <Grid2>
+              <Button variant="contained">작성</Button>
+            </Grid2>
+          </Grid2>
+        </Grid2>
       </Layout>
     </>
   )

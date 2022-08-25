@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 import Link from "next/link";
 import {Button} from "@mui/material";
 
-const PostDev = ({fallback}) => {
+const PostDev = () => {
   const router = useRouter()
 
   // 유저 정보 가져오기
@@ -39,19 +39,16 @@ const PostDev = ({fallback}) => {
 
   return(
     <>
-      <SWRConfig value={{ fallback }}>
-        <Layout>
-
-          <TopHeader>
-            <Link href='/post/edite' >
-              <Button variant="outlined" component="a">포스트 작성</Button>
-            </Link>
-          </TopHeader>
-          <div>
-            sfdsf
-          </div>
-        </Layout>
-      </SWRConfig>
+      <Layout>
+        <TopHeader>
+          <Link href='/post/edite' >
+            <Button variant="outlined" component="a">포스트 작성</Button>
+          </Link>
+        </TopHeader>
+        <div>
+          sfdsf
+        </div>
+      </Layout>
     </>
   )
 }
@@ -61,17 +58,17 @@ const TopHeader = styled.div`
   justify-content: flex-end;
 `
 
-export async function getStaticProps () {
-  // `getStaticProps` is executed on the server side.
-  const categoryData = await fetcher('/api/category/list')
-  return {
-    props: {
-      fallback: {
-        '/api/category/list': categoryData
-      }
-    }
-  }
-}
-
+// export async function getStaticProps () {
+//   // `getStaticProps` is executed on the server side.
+//   const categoryData = await fetcher('/api/category/list')
+//   return {
+//     props: {
+//       fallback: {
+//         '/api/category/list': categoryData
+//       }
+//     }
+//   }
+// }
+//
 
 export default PostDev

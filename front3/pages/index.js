@@ -2,33 +2,31 @@ import Layout from "../components/Layout";
 import fetcher from "../utils/fetcher";
 import useSWR, { SWRConfig } from 'swr'
 
-export default function Home({fallback}) {
+export default function Home() {
   const { data: userData } = useSWR('/api/user/check', fetcher)
 
   return (
     <>
-      <SWRConfig value={{ fallback }}>
-        <Layout>
-          <div>
-            Home
-          </div>
-        </Layout>
-      </SWRConfig>
+      <Layout>
+        <div>
+          Home
+        </div>
+      </Layout>
     </>
   )
 }
 
-export async function getStaticProps () {
-  // `getStaticProps` is executed on the server side.
-  const categoryData = await fetcher('/api/category/list')
-  return {
-    props: {
-      fallback: {
-        '/api/category/list': categoryData
-      }
-    }
-  }
-}
+// export async function getStaticProps () {
+//   // `getStaticProps` is executed on the server side.
+//   const categoryData = await fetcher('/api/category/list')
+//   return {
+//     props: {
+//       fallback: {
+//         '/api/category/list': categoryData
+//       }
+//     }
+//   }
+// }
 
 // export async function getServerSideProps(context) {
 //

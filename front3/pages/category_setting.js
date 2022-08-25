@@ -23,7 +23,7 @@ import DeleteModal from "../components/categorySetting/DeleteModal";
 import {useRecoilState} from "recoil";
 import {singleCategory} from "../stores/categoryState";
 
-const Category_setting = ({fallback}) => {
+const Category_setting = () => {
   const router = useRouter()
 
   // 유저 정보 가져오기
@@ -90,37 +90,35 @@ const Category_setting = ({fallback}) => {
 
   return(
     <>
-      <SWRConfig value={{ fallback }}>
-        <Layout title="카테고리 설정">
-        <Grid
-          container
-          // direction="row"
-          // justifyContent="center"
-          // alignItems="center"
-          spacing={1}
-          marginBottom={2}
-        >
-          <Grid item>
-            <Button variant="contained" onClick={editeModalOpen}>추가</Button>
-          </Grid>
-          <Grid item>
-            <Button variant="contained" color="error" onClick={deleteModalOpen}>삭제</Button>
-          </Grid>
+      <Layout title="카테고리 설정">
+      <Grid
+        container
+        // direction="row"
+        // justifyContent="center"
+        // alignItems="center"
+        spacing={1}
+        marginBottom={2}
+      >
+        <Grid item>
+          <Button variant="contained" onClick={editeModalOpen}>추가</Button>
         </Grid>
+        <Grid item>
+          <Button variant="contained" color="error" onClick={deleteModalOpen}>삭제</Button>
+        </Grid>
+      </Grid>
 
-        <ErrorBoundary fallback={<ErrorResult />}>
-          <Suspense
-            fallback={
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <CircularProgress />
-              </Box>
-            }
-          >
-            <ListTable selected={selected} setSelected={setSelected} editeModalOpen={editeModalOpen} />
-          </Suspense>
-        </ErrorBoundary>
-      </Layout>
-      </SWRConfig>
+      <ErrorBoundary fallback={<ErrorResult />}>
+        <Suspense
+          fallback={
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          }
+        >
+          <ListTable selected={selected} setSelected={setSelected} editeModalOpen={editeModalOpen} />
+        </Suspense>
+      </ErrorBoundary>
+    </Layout>
 
       <EditeModal modalActive={editeModalActive} modalClose={editeModalClose}  />
 
@@ -133,16 +131,16 @@ const Category_setting = ({fallback}) => {
 
 
 
-export async function getStaticProps () {
-  // `getStaticProps` is executed on the server side.
-  const categoryData = await fetcher('/api/category/list')
-  return {
-    props: {
-      fallback: {
-        '/api/category/list': categoryData
-      }
-    }
-  }
-}
+// export async function getStaticProps () {
+//   // `getStaticProps` is executed on the server side.
+//   const categoryData = await fetcher('/api/category/list')
+//   return {
+//     props: {
+//       fallback: {
+//         '/api/category/list': categoryData
+//       }
+//     }
+//   }
+// }
 
 export default Category_setting;

@@ -2,14 +2,15 @@ import React, {useEffect, useState} from 'react'
 import dynamic from "next/dynamic";
 import {useForm, Controller} from "react-hook-form";
 import Layout from "../../../components/Layout";
-import {Box, Button, MenuItem, TextField} from "@mui/material";
+import {Box, Button, Chip, MenuItem, TextField} from "@mui/material";
 import {login} from "../../../apis/user";
 import 'suneditor/dist/css/suneditor.min.css';
 import useSWR from "swr";
 import fetcher from "../../../utils/fetcher";
 import {useRouter} from "next/router";
 import Link from "next/link";
-import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Grid2 from '@mui/material/Unstable_Grid2';
+import AlertBox from "../../../components/base/AlertBox"; // Grid version 2
 
 
 
@@ -26,17 +27,57 @@ const Edite = () => {
   const {data: categoryList, mutate: categoryMutate} = useSWR('/api/category/list', fetcher)
 
   // 포스트 작성 폼 값
-  const { control, handleSubmit, setValue, reset } = useForm({
+  const { control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       login_id: '',
       category_id: '',
+      tag_list: ['안녕']
     }
   });
+
+  const [tagList, setTagList] = useState([])
+  const [tagInput, setTagInput] = useState('')
+  const onChangeTagInput = (e) => {
+    // console.log(e)
+    setTagInput(e.target.value)
+  }
+  /** 태그 추가하는 이벤트 */
+  const tagCreate = (e) => {
+    if (e.code === "Enter" || e.code === "Space") {
+      if (tagList.find(v => v === tagInput)) {
+        alertOpen('error', '이미 등록된 태그 입니다.')
+      } else {
+        setTagList([...tagList, tagInput])
+        setTagInput('')
+      }
+    }
+  }
+  /** 태그 삭제하는 이벤트 */
+  const tagDelete = (e) => {
+    setTagList(tagList.filter(v => v !== e))
+  }
 
 
   // 로그인 이벤트
   const onSubmit = async (value) => {
     console.log(value)
+  }
+
+  // 경고창 상태 값
+  const [alertActive, setAlertActive] = useState(false)
+  // 경고창 텍스트
+  const [alertText, setAlertText] = useState('')
+  // 경고창 종류
+  const [alertType, setAlertType] = useState('success')
+  // 경고창 열기 이벤트
+  const alertOpen = (type, text) => {
+    setAlertType(type)
+    setAlertText(text)
+    setAlertActive(true)
+  }
+  // 경고창 닫기 이벤트
+  const alertClose = () => {
+    setAlertActive(false)
   }
 
   return(
@@ -93,6 +134,22 @@ const Edite = () => {
               )}
             />
           )}
+          <TextField
+            label="태그 추가"
+            fullWidth
+            size="small"
+            sx={{marginBottom: '1rem'}}
+            variant="outlined"
+            value={tagInput}
+            onChange={onChangeTagInput}
+            onKeyPress={tagCreate}
+          />
+        </Box>
+
+        <Box sx={{marginBottom: '1rem'}}>
+          {tagList.map((v, i) => (
+            <Chip key={v} label={v} variant="outlined" onDelete={() =>tagDelete(v)} />
+          ))}
         </Box>
 
         <SunEditor
@@ -135,6 +192,7 @@ const Edite = () => {
           </Grid2>
         </Grid2>
       </Layout>
+      <AlertBox alertActive={alertActive} alertClose={alertClose} alertText={alertText} alertType={alertType} />
     </>
   )
 }

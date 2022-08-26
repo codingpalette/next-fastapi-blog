@@ -31,7 +31,6 @@ const Edite = () => {
     defaultValues: {
       login_id: '',
       category_id: '',
-      tag_list: ['안녕']
     }
   });
 
@@ -187,7 +186,7 @@ const Edite = () => {
               <Button color="info" variant="outlined">임시저장</Button>
             </Grid2>
             <Grid2>
-              <Button variant="contained">작성</Button>
+              <Button variant="contained" onClick={handleSubmit(onSubmit)}>작성</Button>
             </Grid2>
           </Grid2>
         </Grid2>

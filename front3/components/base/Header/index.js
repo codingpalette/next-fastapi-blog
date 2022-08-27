@@ -267,12 +267,12 @@ const Header = () => {
               <ListItemIcon>
                 <ComputerIcon />
               </ListItemIcon>
-              <ListItemText primary="개발" />
+              <ListItemText primary="포스트" />
               {postMenuActive ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={postMenuActive} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <Link href={`/post/dev`} passHref>
+                <Link href={`/post`} passHref>
                   <ListItemButton component="a" sx={{ pl: 4 }}>
                     <ListItemText primary="전체" />
                   </ListItemButton>
@@ -281,7 +281,7 @@ const Header = () => {
                   const level = userData ? userData.level : 1;
                   if (level >= v.level) {
                     return (
-                      <Link href={`/post/dev?category_id=${v.id}`} passHref key={v.id}>
+                      <Link href={`/post?category_id=${v.id}`} passHref key={v.id}>
                         <ListItemButton component="a" sx={{ pl: 4 }}>
                           <ListItemText primary={v.category} />
                         </ListItemButton>

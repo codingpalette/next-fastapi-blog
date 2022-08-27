@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import dynamic from "next/dynamic";
 import {useForm, Controller} from "react-hook-form";
-import Layout from "../../../components/Layout";
+import Layout from "../../components/Layout";
 import {Box, Button, Chip, MenuItem, TextField} from "@mui/material";
-import {login} from "../../../apis/user";
 import 'suneditor/dist/css/suneditor.min.css';
 import useSWR from "swr";
-import fetcher from "../../../utils/fetcher";
+import fetcher from "../../utils/fetcher";
 import {useRouter} from "next/router";
 import Link from "next/link";
 import Grid2 from '@mui/material/Unstable_Grid2';
-import AlertBox from "../../../components/base/AlertBox";
+import AlertBox from "../../components/base/AlertBox";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {post_set} from "../../../apis/post"; // Grid version 2
+import {post_set} from "../../apis/post"; // Grid version 2
 
 
 
@@ -74,7 +73,7 @@ const Edite = () => {
     } else {
       alertOpen('success', res.data.message)
       setButtonLoading(false)
-      // await router.push(`/post/dev?category_id=${value.category_id}`)
+      await router.push(`/post/dev?category_id=${value.category_id}`)
     }
   }
 

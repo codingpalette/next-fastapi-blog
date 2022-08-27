@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import Layout from "../../../components/Layout";
+import Layout from "../../components/Layout";
 import {useRouter} from "next/router";
 import useSWR, {SWRConfig} from "swr";
-import fetcher from "../../../utils/fetcher";
+import fetcher from "../../utils/fetcher";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import {Button} from "@mui/material";

@@ -65,9 +65,10 @@ def token_update(db: Session, post_data: user.UserBase, refresh_token: str) -> U
 def log_out(db: Session, id: int) -> User:
     try:
         user_info = user_get_id(db, id)
-        user_info.refresh_token = ''
-        db.commit()
-        db.refresh(user_info)
+        if user_info:
+            user_info.refresh_token = ''
+            db.commit()
+            db.refresh(user_info)
         return user_info
     except Exception as e:
         print(e)

@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from sqlalchemy.orm import Session
+
+import schemas
 from database.connection import get_db
 from schemas import post
 from crud import crud_post
@@ -18,6 +20,15 @@ router = APIRouter(
     prefix="/post",
 )
 
+# 포스트 생성
+@router.post('/', summary="포스트 생성")
+async def post_set(request: Request, post_data: schemas.PostSet, db: Session = Depends(get_db)):
+    # 로그인 여부 확인
+    login_info = await func.login_info_get(request)
+    if login_info:
+        raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그아웃 후 이용해 주세요."})
+    print(login_info)
+    return True
 
 # 테스트
 @router.get('/test')

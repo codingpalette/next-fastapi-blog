@@ -150,16 +150,21 @@ async def log_out(request: Request, db: Session = Depends(get_db)):
     login_info = await func.login_info_get(request)
     if not login_info:
         raise HTTPException(status_code=401, detail={"result": "fail", "message": "로그인 후 이용해 주세요."})
-
-    log_out_info = crud_user.log_out(db, login_info["id"])
-    if log_out_info:
-        content = {"result": "success", "message": "로그아웃 성공"}
-        response = JSONResponse(content=content)
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
-        return response
     else:
-        raise HTTPException(status_code=501, detail={"result": "fail", "message": "로그아웃 실패"})
+        log_out_info = crud_user.log_out(db, login_info["id"])
+    content = {"result": "success", "message": "로그아웃 성공"}
+    response = JSONResponse(content=content)
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    return response
+    # if log_out_info:
+    #     content = {"result": "success", "message": "로그아웃 성공"}
+    #     response = JSONResponse(content=content)
+    #     response.delete_cookie("access_token")
+    #     response.delete_cookie("refresh_token")
+    #     return response
+    # else:
+    #     raise HTTPException(status_code=501, detail={"result": "fail", "message": "로그아웃 실패"})
 
 
 # 토큰 갱신

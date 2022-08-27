@@ -167,7 +167,7 @@ const Edite = () => {
           />
         </Box>
 
-        <Box sx={{marginBottom: '1rem'}}>
+        <Box sx={{marginBottom: '1rem', display: 'flex', gap: '10px', flexWrap: 'wrap'}}>
           {tagList.map((v, i) => (
             <Chip key={v} label={v} variant="outlined" onDelete={() =>tagDelete(v)} />
           ))}

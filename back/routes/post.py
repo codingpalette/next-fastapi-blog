@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 import schemas
 from database.connection import get_db
 from schemas import post
-from crud import crud_post
+from crud import crud_post, crud_tag, crud_post_tag
 from functions import token, func
 from config import conf
 from dotmap import DotMap
@@ -30,16 +30,17 @@ async def post_set(request: Request, post_data: schemas.PostSet, db: Session = D
 
     post_data.user_id = login_info['id']
 
+    # 포스트를 저장한다
     post_info = await crud_post.post_set(db, post_data)
+
+    # 포스트 저장이 성공하면 태그저장을 한다.
+    # 태그 리스트를 반복 돌리고 생성된 태그인지 확인을 하고 있으면 기존 태그 아이디를 참고 없으면 새로 생성한다
+    for data in post_data.tag_list:
+        tag_info = await crud_tag.tag_get(db, data)
+
+        if not tag_info:
+            tag_info = await crud_tag.tag_set(db, data)
+
+        await crud_post_tag.post_tag_set(db, tag_info.id, post_info.id)
     return JSONResponse({"result": "success", "message": "저장 성공"})
 
-# 테스트
-@router.get('/test')
-def test():
-    return True
-
-
-# 테스트2
-@router.post('/test')
-async def test2(request: Request, post_data: post.PostBase, db: Session = Depends(get_db)):
-    return crud_post.post_set(db, post_data)

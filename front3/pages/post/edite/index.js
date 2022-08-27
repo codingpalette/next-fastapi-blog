@@ -74,7 +74,7 @@ const Edite = () => {
     } else {
       alertOpen('success', res.data.message)
       setButtonLoading(false)
-      await router.push(`/post/dev?category_id=${value.category_id}`)
+      // await router.push(`/post/dev?category_id=${value.category_id}`)
     }
   }
 

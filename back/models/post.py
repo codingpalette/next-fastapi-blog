@@ -7,7 +7,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.id", ondelete='CASCADE'), nullable=False)
-    category_id = Column(Integer, ForeignKey("category.id"))
+    category_id = Column(Integer, ForeignKey("category.id", ondelete='SET NULL'))
     title = Column(String(255), index=True, nullable=False)
     tag_list = Column(PickleType)
     content = Column(PickleType)
@@ -17,3 +17,5 @@ class Post(Base):
 
     category = relationship("Category", back_populates="post")
     user = relationship("User", back_populates="post")
+
+    post_tag = relationship("PostTag", back_populates="post")

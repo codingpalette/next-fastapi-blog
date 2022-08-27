@@ -65,7 +65,6 @@ const Edite = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   // 포스트 작성 이벤트
   const onSubmit = async (value) => {
-    console.log(value)
     setButtonLoading(true)
     const res = await post_set(value, content, tagList)
     if (res.data.result === "fail") {
@@ -75,6 +74,7 @@ const Edite = () => {
     } else {
       alertOpen('success', res.data.message)
       setButtonLoading(false)
+      await router.push(`/post/dev?category_id=${value.category_id}`)
     }
   }
 

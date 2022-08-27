@@ -2,13 +2,29 @@ import React, {useEffect, useState} from 'react'
 import {
   AppBar,
   Box,
-  Button, CardActions, CardContent, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button,
+  CardActions,
+  CardContent,
+  Collapse,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
   Drawer,
   IconButton,
   List,
   ListItem,
-  ListItemButton, ListItemIcon, ListItemText, ListSubheader, Menu, MenuItem,
-  Modal, Snackbar, TextField,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Menu,
+  MenuItem,
+  Modal,
+  Snackbar,
+  TextField,
   Toolbar,
   Typography
 } from "@mui/material";
@@ -18,6 +34,8 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HomeIcon from '@mui/icons-material/Home';
 import ComputerIcon from '@mui/icons-material/Computer';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {useRecoilState} from "recoil";
 import {themeState} from "../../../stores/themeState";
 import {useForm, Controller} from "react-hook-form";
@@ -47,10 +65,6 @@ const Header = () => {
 
   // 카테고리 리스트 가져오기
   const {data: categoryList, mutate: categoryMutate} = useSWR('/api/category/list', fetcher)
-
-  useEffect(() => {
-    console.log('categoryList',categoryList)
-  }, [categoryList])
 
   // 로그인 폼 값
   const { control, handleSubmit, setValue, reset } = useForm({
@@ -226,11 +240,19 @@ const Header = () => {
             sx={{ width: '100%', bgcolor: 'background.paper' }}
             component="nav"
             subheader={
-              <ListSubheader component="div" id="nested-list-subheader">
-                coding palette
+              <ListSubheader component="div">
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                  coding palette
+                  <div>
+                    <IconButton aria-label="사이드바 닫기" onClick={sideBarClose}>
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+                </div>
               </ListSubheader>
             }
           >
+            <Divider />
             <ListItem disablePadding>
               <Link href="/" passHref>
                 <ListItemButton component="a">
@@ -259,7 +281,7 @@ const Header = () => {
                   const level = userData ? userData.level : 1;
                   if (level >= v.level) {
                     return (
-                      <Link href={`/post/dev?category=${v.category}`} passHref key={v.id}>
+                      <Link href={`/post/dev?category_id=${v.id}`} passHref key={v.id}>
                         <ListItemButton component="a" sx={{ pl: 4 }}>
                           <ListItemText primary={v.category} />
                         </ListItemButton>

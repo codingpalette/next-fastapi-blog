@@ -21,7 +21,8 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 const Edite = () => {
   const router = useRouter()
 
-  const [content, setContent] = useState('')
+  // 유저 정보 가져오기
+  const { data: userData, error: userError, mutate: userMutate } = useSWR('/api/user/check', fetcher)
 
   // 카테고리 리스트 가져오기
   const {data: categoryList, mutate: categoryMutate} = useSWR('/api/category/list', fetcher)
@@ -33,6 +34,7 @@ const Edite = () => {
       category_id: '',
     }
   });
+  const [content, setContent] = useState('')
 
   const [tagList, setTagList] = useState([])
   const [tagInput, setTagInput] = useState('')
@@ -79,6 +81,12 @@ const Edite = () => {
     setAlertActive(false)
   }
 
+  if (userError) {
+    router.push("/")
+  }
+  if (!userData) return <div>loading...</div>
+
+
   return(
     <>
       <Layout title="포스트" subTitle="작성">
@@ -94,7 +102,7 @@ const Edite = () => {
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="아이디"
+                label="제목"
                 size="small"
                 fullWidth
                 sx={{marginBottom: '1rem'}}

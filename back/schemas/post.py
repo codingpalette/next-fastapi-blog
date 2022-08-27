@@ -10,6 +10,7 @@ class PostBase(BaseModel):
 
 
 class PostSet(BaseModel):
+    user_id: Optional[int] = None
     category_id: int
     title: str
     tag_list = []

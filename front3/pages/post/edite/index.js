@@ -10,7 +10,9 @@ import fetcher from "../../../utils/fetcher";
 import {useRouter} from "next/router";
 import Link from "next/link";
 import Grid2 from '@mui/material/Unstable_Grid2';
-import AlertBox from "../../../components/base/AlertBox"; // Grid version 2
+import AlertBox from "../../../components/base/AlertBox";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {post_set} from "../../../apis/post"; // Grid version 2
 
 
 
@@ -30,7 +32,7 @@ const Edite = () => {
   // 포스트 작성 폼 값
   const { control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
-      login_id: '',
+      title: '',
       category_id: '',
     }
   });
@@ -59,9 +61,21 @@ const Edite = () => {
   }
 
 
-  // 로그인 이벤트
+  // 버튼 로딩 상태 값
+  const [buttonLoading, setButtonLoading] = useState(false)
+  // 포스트 작성 이벤트
   const onSubmit = async (value) => {
     console.log(value)
+    setButtonLoading(true)
+    const res = await post_set(value, content, tagList)
+    if (res.data.result === "fail") {
+      alertOpen('error', res.data.message)
+      setButtonLoading(false)
+      return
+    } else {
+      alertOpen('success', res.data.message)
+      setButtonLoading(false)
+    }
   }
 
   // 경고창 상태 값
@@ -97,7 +111,7 @@ const Edite = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Controller
-            name="login_id"
+            name="title"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -194,7 +208,14 @@ const Edite = () => {
               <Button color="info" variant="outlined">임시저장</Button>
             </Grid2>
             <Grid2>
-              <Button variant="contained" onClick={handleSubmit(onSubmit)}>작성</Button>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                onClick={handleSubmit(onSubmit)}
+                loading={buttonLoading}
+              >
+                작성
+              </LoadingButton>
             </Grid2>
           </Grid2>
         </Grid2>

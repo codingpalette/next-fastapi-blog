@@ -27,7 +27,7 @@ export default function MyApp(props) {
         </Head>
         <SWRConfig
           value={{
-            revalidateOnFocus: false, //창이 포커싱되었을 때 자동 갱신
+            revalidateOnFocus: true, //창이 포커싱되었을 때 자동 갱신
             shouldRetryOnError: false, //fetcher에 에러가 있을 때 재시도
             errorRetryCount: 0, // 최대 에러 재시도 수
             refreshInterval: 1000 * 60 * 5 // 통신 성공시 재갱신 시간

@@ -1,7 +1,10 @@
+import time
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 from sqlalchemy.orm import Session
+from typing import Optional
 
 import schemas
 from database.connection import get_db
@@ -44,3 +47,8 @@ async def post_set(request: Request, post_data: schemas.PostSet, db: Session = D
         await crud_post_tag.post_tag_set(db, tag_info.id, post_info.id)
     return JSONResponse({"result": "success", "message": "저장 성공"})
 
+
+# 포스트 리스트 가져오기
+@router.get('/list', summary="포스트 리스트 가져오기")
+async def get_list_get(request: Request, page: Optional[int] = 0, category_id: Optional[int] = None, db: Session = Depends(get_db)):
+    return await crud_post.post_list_get(db, page, category_id)

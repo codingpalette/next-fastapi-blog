@@ -58,7 +58,7 @@ const PostList = () => {
 
   return(
     <>
-      <div>
+      <Box sx={{marginTop: 2}}>
         {data && data[0] && (
           <>
             {posts.map(v => (
@@ -66,7 +66,7 @@ const PostList = () => {
             ))}
           </>
         )}
-      </div>
+      </Box>
     </>
   )
 }

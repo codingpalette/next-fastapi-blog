@@ -19,6 +19,7 @@ import {themeState} from "../../stores/themeState";
 import {red} from "@mui/material/colors";
 import Header from "../base/Header";
 import Link from "next/link";
+import Footer from "../base/Footer";
 
 const Layout = ({ children, title, subTitle }) => {
   const [useTheme, setUseTheme] = useRecoilState(themeState)
@@ -60,7 +61,7 @@ const Layout = ({ children, title, subTitle }) => {
           <meta name="theme-color" content={theme.palette.primary.main} />
         </Head>
         <Header />
-        <main>
+        <main style={{minHeight: 'calc(100% - 48px - 71px)'}}>
           <Container maxWidth="lg" sx={{padding: '1rem'}}>
             <Paper square elevation={3} sx={{padding: '1rem'}}>
               <Breadcrumbs aria-label="breadcrumb" sx={{marginBottom: '1rem'}}>
@@ -80,6 +81,7 @@ const Layout = ({ children, title, subTitle }) => {
             </Paper>
           </Container>
         </main>
+        <Footer />
       </ThemeProvider>
     </>
   )
